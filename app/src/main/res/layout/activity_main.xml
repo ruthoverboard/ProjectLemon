@@ -53,5 +53,6 @@
         style="@style/Widget.AppCompat.Button"
         android:layout_above="@+id/textView2"
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="57dp" />
+        android:layout_marginBottom="57dp"
+        android:onClick="LoginClick(MainActivity)" />
 </RelativeLayout>
