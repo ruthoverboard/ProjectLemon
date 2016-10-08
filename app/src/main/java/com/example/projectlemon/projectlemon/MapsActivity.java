@@ -207,7 +207,7 @@ class RetrieveFeedTask extends AsyncTask<Void, Void, String> {
 
             String s = response;
         }
-
+        //
         // TODO: check this.exception
         // TODO: do something with the feed
         /*
