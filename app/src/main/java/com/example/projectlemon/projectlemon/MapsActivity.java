@@ -211,7 +211,7 @@ class RetrieveFeedTask extends AsyncTask<Void, Void, String> {
         // TODO: check this.exception
         // TODO: do something with the feed
         /*
-        //
+
             try {
                 JSONObject object = (JSONObject) new JSONTokener(response).nextValue();
                 String s = (String) object.get("status");
