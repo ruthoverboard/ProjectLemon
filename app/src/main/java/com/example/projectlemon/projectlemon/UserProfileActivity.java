@@ -5,6 +5,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -51,16 +52,8 @@ public class UserProfileActivity extends AppCompatActivity {
                             txtName.setText(object.getString("name"));
 
                             JSONObject picture = object.getJSONObject("picture").getJSONObject("data");
-                            try{
-                                InputStream is = (InputStream) new URL(picture.getString("url")).getContent();
-                                Drawable profilePic = Drawable.createFromStream(is, "src name");
-                                imgProfile.setImageDrawable(profilePic);
-                            }catch (Exception e) {
-                                Log.d("URL:", picture.getString("url"));
-                                Log.d("URL:", e.toString());
-                            }
 
-                            //imgProfile.setImageURI(Uri.parse(picture.getString("url")));
+                            new DownloadImageTask((ImageView) findViewById(R.id.imgProfile)).execute(picture.getString("url"));
 
 
                             JSONObject friends = object.getJSONObject("friends");
@@ -85,5 +78,36 @@ public class UserProfileActivity extends AppCompatActivity {
 
 
 
+
+
     }
+
+    private class DownloadImageTask extends AsyncTask<String, Void, Bitmap> {
+        ImageView bmImage;
+
+        public DownloadImageTask(ImageView bmImage) {
+            this.bmImage = bmImage;
+        }
+
+        protected Bitmap doInBackground(String... urls) {
+            String urldisplay = urls[0];
+            Bitmap mIcon11 = null;
+            try {
+                InputStream in = new java.net.URL(urldisplay).openStream();
+                mIcon11 = BitmapFactory.decodeStream(in);
+            } catch (Exception e) {
+                Log.e("Error", e.getMessage());
+                e.printStackTrace();
+            }
+            return mIcon11;
+        }
+
+        protected void onPostExecute(Bitmap result) {
+
+            bmImage.setImageBitmap(result);
+            bmImage.setAdjustViewBounds(true);
+            bmImage.setScaleType(ImageView.ScaleType.CENTER_CROP);
+        }
+    }
+
 }

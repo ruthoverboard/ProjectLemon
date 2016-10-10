@@ -74,6 +74,7 @@
         android:layout_marginTop="20dp"
         android:id="@+id/imgProfile"
         android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true" />
+        android:layout_centerHorizontal="true"
+        android:scaleType="fitXY"/>
 
 </RelativeLayout>
