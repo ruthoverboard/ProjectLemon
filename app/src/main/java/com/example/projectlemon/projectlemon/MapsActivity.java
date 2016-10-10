@@ -18,8 +18,10 @@ import android.support.v4.content.ContextCompat;
 import android.Manifest;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import com.facebook.AccessToken;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.internal.GetServiceRequest;
@@ -53,6 +55,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        final Bundle pass = getIntent().getExtras();
+
         setContentView(R.layout.activity_maps);
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
@@ -62,6 +67,20 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         button.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 getRoute();
+            }
+        });
+
+        final Button buttonHme = (Button) findViewById(R.id.btnHome);
+        buttonHme.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+
+
+                Intent intent = new Intent(getApplicationContext(), UserProfileActivity.class);
+                //intent.putExtra(AccessToken token, extras.get("token"));
+                intent.putExtra("token", pass.getString("token"));
+
+                startActivity(intent);
+                //startActivity(new Intent(MainActivity.this, MapsActivity.class));
             }
         });
 
