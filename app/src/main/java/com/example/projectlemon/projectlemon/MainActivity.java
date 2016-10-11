@@ -35,12 +35,12 @@ public class MainActivity extends AppCompatActivity {
         LoginButton loginButton = (LoginButton) findViewById(R.id.login_button);
         loginButton.setReadPermissions("email", "public_profile", "user_friends");
 
-        //final Button button = (Button) findViewById(R.id.btnLogin);
-        //button.setOnClickListener(new View.OnClickListener() {
-        //    public void onClick(View v) {
-        //        startActivity(new Intent(MainActivity.this, MapsActivity.class));
-        //    }
-        //});
+        final Button button = (Button) findViewById(R.id.btnMaps);
+        button.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                startActivity(new Intent(MainActivity.this, MapsActivity.class));
+            }
+        });
 
         LoginManager.getInstance().registerCallback(callbackManager,
                 new FacebookCallback<LoginResult>() {
