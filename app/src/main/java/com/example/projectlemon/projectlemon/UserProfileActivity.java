@@ -15,6 +15,7 @@ import android.widget.TextView;
 import com.facebook.AccessToken;
 import com.facebook.GraphRequest;
 import com.facebook.GraphResponse;
+import com.facebook.login.widget.ProfilePictureView;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -46,15 +47,19 @@ public class UserProfileActivity extends AppCompatActivity {
                         // Application code
                         TextView txtName = (TextView) findViewById(R.id.txtName);
                         TextView txtFriends = (TextView) findViewById(R.id.txtFriends);
-                        ImageView imgProfile = (ImageView)findViewById(R.id.imgProfile);
+                        ProfilePictureView imgProfile = (ProfilePictureView)findViewById(R.id.img);
+
                         //txtName.setText(extras.getString("token"));
                         try {
                             txtName.setText(object.getString("name"));
 
                             JSONObject picture = object.getJSONObject("picture").getJSONObject("data");
 
-                            new DownloadImageTask((ImageView) findViewById(R.id.imgProfile)).execute(picture.getString("url"));
+                            //new DownloadImageTask((ImageView) findViewById(R.id.imgProfile)).execute(picture.getString("url"));
 
+                            ProfilePictureView profilePictureView;
+                            profilePictureView = (ProfilePictureView) findViewById(R.id.img);
+                            profilePictureView.setProfileId(object.getString("id"));
 
                             JSONObject friends = object.getJSONObject("friends");
                             JSONArray friendsData = friends.getJSONArray("data");
@@ -106,7 +111,7 @@ public class UserProfileActivity extends AppCompatActivity {
 
             bmImage.setImageBitmap(result);
             bmImage.setAdjustViewBounds(true);
-            bmImage.setScaleType(ImageView.ScaleType.CENTER_CROP);
+            bmImage.setScaleType(ImageView.ScaleType.FIT_CENTER);
         }
     }
 

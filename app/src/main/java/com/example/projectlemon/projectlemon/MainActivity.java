@@ -50,7 +50,7 @@ public class MainActivity extends AppCompatActivity {
                         Profile profile = Profile.getCurrentProfile();
 
                         Bundle pass = new Bundle();
-                        Intent intent = new Intent(getApplicationContext(), MapsActivity.class);
+                        Intent intent = new Intent(getApplicationContext(), UserProfileActivity.class);
                         pass.putString("token", accessToken.getToken());
 
                         intent.putExtras(pass);
