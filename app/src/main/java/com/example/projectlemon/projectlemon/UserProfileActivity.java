@@ -16,6 +16,8 @@ import com.facebook.AccessToken;
 import com.facebook.GraphRequest;
 import com.facebook.GraphResponse;
 import com.facebook.login.widget.ProfilePictureView;
+import com.facebook.share.model.ShareLinkContent;
+import com.facebook.share.widget.ShareButton;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -75,6 +77,13 @@ public class UserProfileActivity extends AppCompatActivity {
                         Log.d("json:", object.toString());
                     }
                 });
+        ShareLinkContent content = new ShareLinkContent.Builder()
+                .setContentUrl(Uri.parse("https://www.facebook.com/CetysCarPool/"))
+                .build();
+
+        ShareButton shareButton = (ShareButton)findViewById(R.id.fb_share_btn);
+        shareButton.setShareContent(content);
+
         Bundle parameters = new Bundle();
         parameters.putString("fields", "id,name,friends,picture");
         request.setParameters(parameters);

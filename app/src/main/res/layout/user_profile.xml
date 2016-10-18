@@ -75,8 +75,17 @@
         android:padding="5sp"
 
         android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
         android:layout_alignLeft="@+id/txtName"
         android:layout_alignStart="@+id/txtName"
         android:layout_marginTop="10dp" />
+
+    <com.facebook.share.widget.ShareButton
+        android:id="@+id/fb_share_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:contentDescription="Share"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true" />
 
 </RelativeLayout>
