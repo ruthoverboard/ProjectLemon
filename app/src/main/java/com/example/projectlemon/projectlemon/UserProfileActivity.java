@@ -35,7 +35,7 @@ public class UserProfileActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.user_profile);
 
-        final Bundle extras = getIntent().getExtras();
+        //final Bundle extras = getIntent().getExtras();
 
         AccessToken accessToken = AccessToken.getCurrentAccessToken();
 

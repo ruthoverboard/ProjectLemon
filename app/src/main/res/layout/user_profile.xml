@@ -13,7 +13,7 @@
     tools:context="com.example.projectlemon.projectlemon.UserProfileActivity">
 
     <TextView
-        android:text="Jane Doe"
+        android:text=""
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/img"
@@ -61,6 +61,7 @@
                 android:layout_height="wrap_content"
                 android:layout_centerHorizontal="true"
                 android:layout_marginTop="26dp"
+                android:layout_marginLeft="26dp"
                 android:id="@+id/txtFriends"
                 android:textSize="18sp" />
 
@@ -73,12 +74,10 @@
         android:layout_height="wrap_content"
         android:gravity="center_horizontal"
         android:padding="5sp"
-
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:layout_alignLeft="@+id/txtName"
-        android:layout_alignStart="@+id/txtName"
         android:layout_marginTop="10dp" />
+
 
     <com.facebook.share.widget.ShareButton
         android:id="@+id/fb_share_btn"
@@ -87,5 +86,7 @@
         android:contentDescription="Share"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true" />
+
+
 
 </RelativeLayout>

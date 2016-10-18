@@ -90,12 +90,12 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             public void onClick(View v) {
 
 
-                Intent intent = new Intent(getApplicationContext(), UserProfileActivity.class);
+                //Intent intent = new Intent(getApplicationContext(), UserProfileActivity.class);
                 //intent.putExtra(AccessToken token, extras.get("token"));
-                intent.putExtra("token", pass.getString("token"));
+                //intent.putExtra("token", pass.getString("token"));
 
-                startActivity(intent);
-                //startActivity(new Intent(MainActivity.this, MapsActivity.class));
+                //startActivity(intent);
+                startActivity(new Intent(MapsActivity.this, UserProfileActivity.class));
             }
         });
 

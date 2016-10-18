@@ -49,14 +49,14 @@ public class MainActivity extends AppCompatActivity {
                         AccessToken accessToken = loginResult.getAccessToken();
                         Profile profile = Profile.getCurrentProfile();
 
-                        Bundle pass = new Bundle();
-                        Intent intent = new Intent(getApplicationContext(), UserProfileActivity.class);
-                        pass.putString("token", accessToken.getToken());
+                        //Bundle pass = new Bundle();
+                        //Intent intent = new Intent(getApplicationContext(), UserProfileActivity.class);
+                        //pass.putString("token", accessToken.getToken());
 
-                        intent.putExtras(pass);
+                        //intent.putExtras(pass);
                         //intent.putExtra("profile", profile.getName());
-                        startActivity(intent);
-                        //startActivity(new Intent(MainActivity.this, MapsActivity.class));
+                        //startActivity(intent);
+                        startActivity(new Intent(MainActivity.this, MapsActivity.class));
                     }
 
                     @Override
