@@ -1,6 +1,6 @@
 <resources>
-    <string name="app_name">ProjectLemon</string>
-    <string name="title_activity_maps">Map</string>
+    <string name="app_name">CETYS Carpool</string>
+    <string name="title_activity_maps">Raites</string>
     <string name="app_id">691583321010674</string>
-    <string name="title_activity_user_profile">userProfileActivity</string>
+    <string name="title_activity_user_profile">Perfil</string>
 </resources>
