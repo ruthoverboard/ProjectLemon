@@ -48,6 +48,8 @@ import java.net.URL;
 import com.amazonaws.mobileconnectors.kinesis.kinesisrecorder.*;
 import com.amazonaws.auth.CognitoCachingCredentialsProvider;
 import com.amazonaws.regions.Regions;
+import com.amazonaws.services.dynamodbv2.*;
+//import com.amazonaws.mobileconnectors.dynamodbv2.dynamodbmapper.*;
 import java.security.Provider;
 
 import static com.facebook.FacebookSdk.getApplicationContext;
@@ -61,7 +63,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private LatLng myLatLng;
     LatLng latLngCetys = new LatLng(32.50660123141241, -116.92439664155245);
     public static KinesisRecorder recorder;
-
+    public static AWSHelper cognito;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -104,6 +106,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
 
     }
+
+
+
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
