@@ -12,6 +12,7 @@ import android.util.Log;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.amazonaws.regions.Regions;
 import com.facebook.AccessToken;
 import com.facebook.GraphRequest;
 import com.facebook.GraphResponse;
@@ -27,6 +28,7 @@ import java.io.BufferedInputStream;
 import java.io.InputStream;
 import java.net.URL;
 import java.net.URLConnection;
+
 
 public class UserProfileActivity extends AppCompatActivity {
 
@@ -88,6 +90,8 @@ public class UserProfileActivity extends AppCompatActivity {
         parameters.putString("fields", "id,name,friends,picture");
         request.setParameters(parameters);
         request.executeAsync();
+
+        //base de datos
 
 
 
