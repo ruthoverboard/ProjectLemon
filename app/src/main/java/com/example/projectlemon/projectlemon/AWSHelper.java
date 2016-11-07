@@ -8,6 +8,10 @@ import com.amazonaws.auth.CognitoCredentialsProvider;
 import com.amazonaws.mobileconnectors.kinesis.kinesisrecorder.KinesisRecorder;
 import com.amazonaws.regions.Regions;
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDBClient;
+<<<<<<< HEAD
+
+=======
+>>>>>>> 12a7de77573d98496841dffad58b94fc718bbe3f
 
 import java.io.File;
 
@@ -37,6 +41,10 @@ public class AWSHelper {
             //Toast.makeText(this, ex.toString(), Toast.LENGTH_LONG).show();
 
         }
+        AmazonDynamoDBClient ddbClient = new AmazonDynamoDBClient(credentialsProvider);
+        //DynamoDBMapper mapper = new DynamoDBMapper(ddbClient);
+
+
     }
 
     public void dynamoDB(){
