@@ -38,7 +38,7 @@ public class MainActivity extends AppCompatActivity {
         final Button button = (Button) findViewById(R.id.btnMaps);
         button.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                startActivity(new Intent(MainActivity.this, MapsActivity.class));
+                startActivity(new Intent(MainActivity.this, firstLogin.class));
             }
         });
 
@@ -56,7 +56,7 @@ public class MainActivity extends AppCompatActivity {
                         //intent.putExtras(pass);
                         //intent.putExtra("profile", profile.getName());
                         //startActivity(intent);
-                        startActivity(new Intent(MainActivity.this, MapsActivity.class));
+                        startActivity(new Intent(MainActivity.this, firstLogin.class));
                     }
 
                     @Override

@@ -23,6 +23,7 @@ import com.facebook.share.widget.ShareButton;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.w3c.dom.Text;
 
 import java.io.BufferedInputStream;
 import java.io.InputStream;
@@ -32,10 +33,22 @@ import java.net.URLConnection;
 
 public class UserProfileActivity extends AppCompatActivity {
 
+    Bundle extras = getIntent().getExtras();
+    String career;
+    Intent intent = getIntent();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.user_profile);
+        if(extras != null){
+            career = extras.getString("Career");
+        }
+        //career = intent.getStringExtra("Career");
+
+
+
+
 
         //final Bundle extras = getIntent().getExtras();
 
@@ -52,6 +65,11 @@ public class UserProfileActivity extends AppCompatActivity {
                         TextView txtName = (TextView) findViewById(R.id.txtName);
                         TextView txtFriends = (TextView) findViewById(R.id.txtFriends);
                         ProfilePictureView imgProfile = (ProfilePictureView)findViewById(R.id.img);
+                        TextView txtCareer = (TextView)findViewById(R.id.txtCareer);
+                        if(career != null){
+                            txtCareer.setText(career);
+                        }
+
 
                         //txtName.setText(extras.getString("token"));
                         try {

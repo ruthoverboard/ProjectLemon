@@ -3,4 +3,14 @@
     <string name="title_activity_maps">Raites</string>
     <string name="app_id">691583321010674</string>
     <string name="title_activity_user_profile">Perfil</string>
+    <string-array name="careersArray">
+        <item>Ingeniería de Software</item>
+        <item>Ingeniería en Cibernética Electrónica</item>
+        <item>Ingeniería en Ciencias Computacionales</item>
+        <item>Ingeniería en Diseño Gráfico Digital</item>
+        <item>Ingeniería en Energías Renovables</item>
+        <item>Ingeniería en Mecatrónica</item>
+        <item>Ingeniería Industrial</item>
+        <item>Inteniería Mecánica</item>
+    </string-array>
 </resources>
