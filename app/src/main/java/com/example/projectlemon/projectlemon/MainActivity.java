@@ -38,7 +38,7 @@ public class MainActivity extends AppCompatActivity {
         final Button button = (Button) findViewById(R.id.btnMaps);
         button.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                startActivity(new Intent(MainActivity.this, firstLogin.class));
+                startActivity(new Intent(MainActivity.this, MapsActivity.class));
             }
         });
 
@@ -46,6 +46,7 @@ public class MainActivity extends AppCompatActivity {
                 new FacebookCallback<LoginResult>() {
                     @Override
                     public void onSuccess(LoginResult loginResult) {
+                        //query que manda a buscar al usuario
                         AccessToken accessToken = loginResult.getAccessToken();
                         Profile profile = Profile.getCurrentProfile();
 

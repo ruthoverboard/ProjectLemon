@@ -31,8 +31,12 @@ public class firstLogin extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(firstLogin.this, UserProfileActivity.class);
+                Bundle bndl = new Bundle();
+
                 if(career != null){
                     //intent.putExtra("Career", career);
+                    bndl.putString("Career", career);
+                    intent.putExtras(bndl);
                 }
                 startActivity(intent);
             }
@@ -46,7 +50,7 @@ public class firstLogin extends AppCompatActivity {
             @Override
             public void onItemSelected(AdapterView<?> parent, android.view.View view, int position, long id) {
                 Toast.makeText(getBaseContext(), parent.getItemAtPosition(position) + " seleccionada.", Toast.LENGTH_LONG).show();
-                //career = (String)parent.getItemAtPosition(position);
+                career = (String)parent.getItemAtPosition(position);
             }
 
             @Override

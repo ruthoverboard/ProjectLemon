@@ -12,61 +12,6 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.example.projectlemon.projectlemon.UserProfileActivity">
 
-    <TextView
-        android:text=""
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/img"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="21dp"
-        android:id="@+id/txtName"
-        android:textSize="24sp" />
-
-    <TextView
-        android:text="Ingeniería en Ciencias Computacionales"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/txtCareer"
-        android:layout_below="@+id/txtName"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="36dp"
-        android:textAlignment="center"
-        android:textSize="18sp" />
-
-    <TextView
-        android:text="Friends"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/txtCareer"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="24dp"
-        android:id="@+id/textView4"
-        android:textSize="18sp" />
-
-    <ScrollView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:id="@+id/scrollFriends"
-        android:scrollbarStyle="insideOverlay"
-        android:layout_below="@+id/textView4">
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
-
-            <TextView
-                android:text=""
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerHorizontal="true"
-                android:layout_marginTop="26dp"
-                android:layout_marginLeft="26dp"
-                android:id="@+id/txtFriends"
-                android:textSize="18sp" />
-
-        </LinearLayout>
-    </ScrollView>
 
     <com.facebook.login.widget.ProfilePictureView
         android:id="@+id/img"
@@ -74,19 +19,97 @@
         android:layout_height="wrap_content"
         android:gravity="center_horizontal"
         android:padding="5sp"
+        android:layout_marginTop="30dp"
         android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="10dp" />
+        android:layout_toLeftOf="@+id/fb_share_btn"
+        android:layout_toStartOf="@+id/fb_share_btn"
+        android:layout_marginRight="15dp"
+        android:layout_marginEnd="15dp" />
 
+    <TextView
+        android:text="Career"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/img"
+        android:layout_alignLeft="@+id/fb_share_btn"
+        android:layout_alignStart="@+id/fb_share_btn"
+        android:layout_marginLeft="23dp"
+        android:layout_marginStart="23dp"
+        android:layout_marginBottom="12dp"
+        android:id="@+id/txtCareer" />
+
+    <TextView
+        android:text="Name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/txtName"
+        android:layout_alignTop="@+id/img"
+        android:layout_alignLeft="@+id/txtCareer"
+        android:layout_alignStart="@+id/txtCareer"
+        android:textSize="18sp"
+        android:textStyle="normal|bold" />
+
+    <TextView
+        android:text="Friends"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/txtCareer"
+        android:layout_alignLeft="@+id/fb_share_btn"
+        android:layout_alignStart="@+id/fb_share_btn"
+        android:layout_marginTop="39dp"
+        android:id="@+id/textView5"
+        android:textSize="18sp"
+        android:textStyle="normal|bold" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+
+        android:id="@+id/scrollFriends"
+        android:layout_below="@+id/textView5"
+        android:layout_centerHorizontal="true">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" >
+
+            <TextView
+                android:id="@+id/txtFriends"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                >
+            </TextView>
+        </LinearLayout>
+    </ScrollView>
 
     <com.facebook.share.widget.ShareButton
         android:id="@+id/fb_share_btn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:contentDescription="Share"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true" />
+        android:layout_centerHorizontal="true"
+        android:layout_alignParentBottom="true" />
 
+    <Button
+        android:text="Dar raite"
+        android:layout_width="115dp"
+        android:layout_height="50dp"
+        android:id="@+id/btnPedirRaite"
+        android:layout_marginLeft="11dp"
+        android:layout_marginStart="11dp"
+        android:layout_above="@+id/fb_share_btn"
+        android:layout_toRightOf="@+id/fb_share_btn"
+        android:layout_toEndOf="@+id/fb_share_btn" />
+
+    <Button
+        android:text="Pedir raite"
+        android:layout_width="115dp"
+        android:layout_height="50dp"
+        android:id="@+id/btnDarRaite"
+        android:layout_above="@+id/fb_share_btn"
+        android:layout_alignRight="@+id/img"
+        android:layout_alignEnd="@+id/img" />
 
 
 </RelativeLayout>
