@@ -60,7 +60,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private GoogleMap mMap;
     private LatLng myLatLng;
     LatLng latLngCetys = new LatLng(32.50660123141241, -116.92439664155245);
-    public static KinesisRecorder recorder;
+    static AWSHelper awsHelper = AWSHelper.getInstance();
 
 
     @Override
@@ -89,17 +89,10 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         buttonHme.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
 
-
-                //Intent intent = new Intent(getApplicationContext(), UserProfileActivity.class);
-                //intent.putExtra(AccessToken token, extras.get("token"));
-                //intent.putExtra("token", pass.getString("token"));
-
-                //startActivity(intent);
                 startActivity(new Intent(MapsActivity.this, UserProfileActivity.class));
             }
         });
 
-        recorder = setUpAWS();
 
 
 
@@ -125,11 +118,11 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     @Override
     public void onLocationChanged(Location location) {
 
-            recorder.saveRecord(location.toString().getBytes(), "ProjectLemonStream");
+            awsHelper.rec.saveRecord("spoopy", "ProjectLemonStream");
             //Toast.makeText(this, ex.toString(), Toast.LENGTH_LONG).show();
 
         try{
-            recorder.submitAllRecords();
+
         }catch (Exception ex){
             Toast.makeText(this, ex.toString(), Toast.LENGTH_LONG).show();
 
@@ -204,31 +197,13 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         r.myLatLng = myLatLng;
         r.latLngCetys = latLngCetys;
         r.execute();
+        awsHelper.rec.submitAllRecords();
+        awsHelper.rec.deleteAllRecords();
         Toast.makeText(this, "It WORKS!", Toast.LENGTH_LONG).show();
     }
 
 
-    public KinesisRecorder setUpAWS(){
-        CognitoCachingCredentialsProvider credentialsProvider = new CognitoCachingCredentialsProvider(
-                getApplicationContext(),
-                "us-east-1:a0c3cc8d-5bb5-4c28-b4b7-9282805a37d3", // Identity Pool ID
-                Regions.US_EAST_1 // Region
-        );
-        String path = "CetysCarpool";
-        KinesisRecorder rec;
-        try{
-        rec = new KinesisRecorder(
-                this.getDir(path, 0), // An empty directory KinesisRecorder can use for storing requests
-                Regions.US_EAST_1,  // Region that this Recorder should save and send requests to
-                credentialsProvider);
-            return rec;
 
-        }catch (Exception ex){
-            Toast.makeText(this, ex.toString(), Toast.LENGTH_LONG).show();
-            return null;
-        }
-
-    }
 
 }
 class RetrieveFeedTask extends AsyncTask<Void, Void, String> {
