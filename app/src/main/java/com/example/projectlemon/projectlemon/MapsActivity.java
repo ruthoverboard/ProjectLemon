@@ -71,6 +71,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         super.onCreate(savedInstanceState);
         getPermissions();
         final Bundle pass = getIntent().getExtras();
+        getPermissions();
 
         setContentView(R.layout.activity_maps);
         if (android.os.Build.VERSION.SDK_INT > 9) {
