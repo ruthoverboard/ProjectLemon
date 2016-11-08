@@ -59,7 +59,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         LocationListener {
 
 
-    private GoogleMap mMap;
+    public GoogleMap mMap;
     private LatLng myLatLng;
     LatLng latLngCetys = new LatLng(32.50660123141241, -116.92439664155245);
     static AWSHelper awsHelper = AWSHelper.getInstance();
@@ -79,6 +79,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             StrictMode.setThreadPolicy(policy);
         }
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
+
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
