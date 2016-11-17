@@ -120,16 +120,20 @@ public class UserProfileActivity extends AppCompatActivity {
 
         //Dar raite
         Button btnMaps = (Button) findViewById(R.id.btnDarRaite);
-        btnMaps.setOnClickListener(new View.OnClickListener(){
-
-            @Override
+        btnMaps.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                Intent intent = new Intent(UserProfileActivity.this, MapsActivity.class);
-                startActivity(intent);
+
+                startActivity(new Intent(UserProfileActivity.this, MapsActivity.class));
             }
         });
 
+        Button btnGetRaite = (Button) findViewById(R.id.btnPedirRaite);
+        btnGetRaite.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
 
+                startActivity(new Intent(UserProfileActivity.this, MapsActivityGetRaite.class));
+            }
+        });
 
     }
 

@@ -1,88 +1,64 @@
 package com.example.projectlemon.projectlemon;
 
+import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.AsyncTask;
-import android.os.Environment;
+import android.os.Bundle;
 import android.os.StrictMode;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
-import android.os.Bundle;
-import android.support.v4.app.NotificationCompat;
 import android.support.v4.content.ContextCompat;
-import android.Manifest;
 import android.view.View;
 import android.widget.Button;
-import android.widget.TextView;
 import android.widget.Toast;
 
-import com.facebook.AccessToken;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.common.internal.GetServiceRequest;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.MarkerOptions;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-import org.json.JSONTokener;
 
 import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import com.amazonaws.mobileconnectors.kinesis.kinesisrecorder.*;
-import com.amazonaws.auth.CognitoCachingCredentialsProvider;
-import com.amazonaws.regions.Regions;
-import com.amazonaws.services.dynamodbv2.*;
 //import com.amazonaws.mobileconnectors.dynamodbv2.dynamodbmapper.*;
-import java.security.Provider;
 
-import static com.facebook.FacebookSdk.getApplicationContext;
 
-public class MapsActivity extends FragmentActivity implements OnMapReadyCallback, GoogleApiClient.ConnectionCallbacks,
+public class MapsActivityGetRaite extends FragmentActivity implements OnMapReadyCallback, GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener,
         LocationListener {
 
 
-<<<<<<< HEAD
     private GoogleMap mMap;
-    private Location myLocation;
-=======
-    public GoogleMap mMap;
     private LatLng myLatLng;
->>>>>>> 1c5c48f9b9e197e8ed2c2de28f858da5501300b5
     LatLng latLngCetys = new LatLng(32.50660123141241, -116.92439664155245);
     static AWSHelper awsHelper = AWSHelper.getInstance();
-    Double latSend, longSend;
-    Location lastKnownLocation;
+
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        getPermissions();
         final Bundle pass = getIntent().getExtras();
-        setContentView(R.layout.activity_maps);
+        getPermissions();
+
+        setContentView(R.layout.activity_maps_get_raite);
         if (android.os.Build.VERSION.SDK_INT > 9) {
             StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
             StrictMode.setThreadPolicy(policy);
         }
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
-
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
@@ -97,7 +73,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         buttonHme.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
 
-                startActivity(new Intent(MapsActivity.this, UserProfileActivity.class));
+                startActivity(new Intent(MapsActivityGetRaite.this, UserProfileActivity.class));
             }
         });
 
@@ -112,13 +88,13 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
-        getPermissions();
+
         LocationManager locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
         try {
             locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, this);
-            myLocation = locationManager.getLastKnownLocation(locationManager.GPS_PROVIDER);
-            lastKnownLocation = myLocation;
-            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(myLatLng, 17));
+            Location location = locationManager.getLastKnownLocation(locationManager.GPS_PROVIDER);
+             myLatLng = new LatLng(location.getLatitude(), location.getLongitude());
+             mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(myLatLng, 17));
         }catch (SecurityException ex){
             Toast.makeText(this, ex.toString(), Toast.LENGTH_LONG).show();
         }
@@ -128,14 +104,10 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     @Override
     public void onLocationChanged(Location location) {
-        latSend = location.getLatitude();
-        longSend = location.getLongitude();
-        if(Math.abs(location.getLatitude() - lastKnownLocation.getLatitude()) >= .0000001 ){
-            awsHelper.rec.saveRecord(longSend.toString() + " , " +  latSend.toString(), "ProjectLemonStream");
-            awsHelper.rec.submitAllRecords();
-            awsHelper.rec.deleteAllRecords();
-            lastKnownLocation.setLatitude(location.getLatitude());
-        }
+
+            awsHelper.rec.saveRecord("spoopy", "ProjectLemonStream");
+            //Toast.makeText(this, ex.toString(), Toast.LENGTH_LONG).show();
+
         try{
 
         }catch (Exception ex){
@@ -208,10 +180,12 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 + myLatLng.latitude + "," + myLatLng.longitude +
                 "&destination=" + latLngCetys.latitude + "," + latLngCetys.longitude +
                 "&key=AIzaSyCq7XqwYUeGOVLqs4FzvjDrYYRGLEar3-A";
-        RetrieveFeedTask r = new RetrieveFeedTask();
+        RetrieveFeedTask2 r = new RetrieveFeedTask2();
         r.myLatLng = myLatLng;
         r.latLngCetys = latLngCetys;
-        //r.execute();
+        r.execute();
+        awsHelper.rec.submitAllRecords();
+        awsHelper.rec.deleteAllRecords();
         Toast.makeText(this, "It WORKS!", Toast.LENGTH_LONG).show();
     }
 
@@ -219,7 +193,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
 
 }
-class RetrieveFeedTask extends AsyncTask<Void, Void, String> {
+
+class RetrieveFeedTask2 extends AsyncTask<Void, Void, String> {
     private Exception exception;
     public LatLng myLatLng;
     public LatLng latLngCetys;
