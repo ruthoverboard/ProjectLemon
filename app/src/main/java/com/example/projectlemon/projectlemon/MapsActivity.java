@@ -60,19 +60,17 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
 
     private GoogleMap mMap;
-    private LatLng myLatLng;
+    private Location myLocation;
     LatLng latLngCetys = new LatLng(32.50660123141241, -116.92439664155245);
     static AWSHelper awsHelper = AWSHelper.getInstance();
-
+    Double latSend, longSend;
+    Location lastKnownLocation;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        getPermissions();
         final Bundle pass = getIntent().getExtras();
-        getPermissions();
-
         setContentView(R.layout.activity_maps);
         if (android.os.Build.VERSION.SDK_INT > 9) {
             StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
@@ -108,13 +106,13 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
-
+        getPermissions();
         LocationManager locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
         try {
             locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, this);
-            Location location = locationManager.getLastKnownLocation(locationManager.GPS_PROVIDER);
-             myLatLng = new LatLng(location.getLatitude(), location.getLongitude());
-             mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(myLatLng, 17));
+            myLocation = locationManager.getLastKnownLocation(locationManager.GPS_PROVIDER);
+            lastKnownLocation = myLocation;
+            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(myLatLng, 17));
         }catch (SecurityException ex){
             Toast.makeText(this, ex.toString(), Toast.LENGTH_LONG).show();
         }
@@ -124,10 +122,14 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     @Override
     public void onLocationChanged(Location location) {
-
-            awsHelper.rec.saveRecord("spoopy", "ProjectLemonStream");
-            //Toast.makeText(this, ex.toString(), Toast.LENGTH_LONG).show();
-
+        latSend = location.getLatitude();
+        longSend = location.getLongitude();
+        if(Math.abs(location.getLatitude() - lastKnownLocation.getLatitude()) >= .0000001 ){
+            awsHelper.rec.saveRecord(longSend.toString() + " , " +  latSend.toString(), "ProjectLemonStream");
+            awsHelper.rec.submitAllRecords();
+            awsHelper.rec.deleteAllRecords();
+            lastKnownLocation.setLatitude(location.getLatitude());
+        }
         try{
 
         }catch (Exception ex){
@@ -203,9 +205,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         RetrieveFeedTask r = new RetrieveFeedTask();
         r.myLatLng = myLatLng;
         r.latLngCetys = latLngCetys;
-        r.execute();
-        awsHelper.rec.submitAllRecords();
-        awsHelper.rec.deleteAllRecords();
+        //r.execute();
         Toast.makeText(this, "It WORKS!", Toast.LENGTH_LONG).show();
     }
 
