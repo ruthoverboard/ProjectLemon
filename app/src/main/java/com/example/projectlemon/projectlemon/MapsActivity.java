@@ -59,7 +59,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         LocationListener {
 
 
-<<<<<<< HEAD
+<<<<<<< HEAD 
     private GoogleMap mMap;
     private Location myLocation;
 =======
