@@ -59,13 +59,12 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         LocationListener {
 
 
+<<<<<<< HEAD
 <<<<<<< HEAD 
+=======
+>>>>>>> 108bbb4ffd854eb30096cc73e0c73543ca3051bc
     private GoogleMap mMap;
     private Location myLocation;
-=======
-    public GoogleMap mMap;
-    private LatLng myLatLng;
->>>>>>> 1c5c48f9b9e197e8ed2c2de28f858da5501300b5
     LatLng latLngCetys = new LatLng(32.50660123141241, -116.92439664155245);
     static AWSHelper awsHelper = AWSHelper.getInstance();
     Double latSend, longSend;
@@ -113,12 +112,13 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
         getPermissions();
+
         LocationManager locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
         try {
             locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, this);
             myLocation = locationManager.getLastKnownLocation(locationManager.GPS_PROVIDER);
             lastKnownLocation = myLocation;
-            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(myLatLng, 17));
+            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(myLocation.getLatitude(),myLocation.getLongitude()), 17));
         }catch (SecurityException ex){
             Toast.makeText(this, ex.toString(), Toast.LENGTH_LONG).show();
         }
@@ -128,12 +128,11 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     @Override
     public void onLocationChanged(Location location) {
-        latSend = location.getLatitude();
-        longSend = location.getLongitude();
-        if(Math.abs(location.getLatitude() - lastKnownLocation.getLatitude()) >= .0000001 ){
-            awsHelper.rec.saveRecord(longSend.toString() + " , " +  latSend.toString(), "ProjectLemonStream");
-            awsHelper.rec.submitAllRecords();
-            awsHelper.rec.deleteAllRecords();
+        //latSend = location.getLatitude();
+        //longSend = location.getLongitude();
+
+        if(Math.abs(location.getLatitude() - lastKnownLocation.getLatitude()) >= .001 ){
+
             lastKnownLocation.setLatitude(location.getLatitude());
         }
         try{
@@ -203,7 +202,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         }
     }
 
-    private void getRoute(){
+    private void getRoute(){/*
         String url = "https://maps.googleapis.com/maps/api/directions/json?origin="
                 + myLatLng.latitude + "," + myLatLng.longitude +
                 "&destination=" + latLngCetys.latitude + "," + latLngCetys.longitude +
@@ -212,13 +211,17 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         r.myLatLng = myLatLng;
         r.latLngCetys = latLngCetys;
         //r.execute();
+        */
+        awsHelper.rec.saveRecord("mudabull", "ProjectLemonStream");
+        awsHelper.rec.submitAllRecords();
+        awsHelper.rec.deleteAllRecords();
         Toast.makeText(this, "It WORKS!", Toast.LENGTH_LONG).show();
     }
 
 
 
 
-}
+}/*
 class RetrieveFeedTask extends AsyncTask<Void, Void, String> {
     private Exception exception;
     public LatLng myLatLng;
@@ -275,11 +278,11 @@ class RetrieveFeedTask extends AsyncTask<Void, Void, String> {
 
             } catch (JSONException e) {
                 e.printStackTrace();
-            }*/
+            }
     }
+*/
 
 
 
-}
 
 

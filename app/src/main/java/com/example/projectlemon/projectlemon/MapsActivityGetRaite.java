@@ -42,7 +42,6 @@ public class MapsActivityGetRaite extends FragmentActivity implements OnMapReady
     private GoogleMap mMap;
     private LatLng myLatLng;
     LatLng latLngCetys = new LatLng(32.50660123141241, -116.92439664155245);
-    static AWSHelper awsHelper = AWSHelper.getInstance();
 
 
 
@@ -51,7 +50,6 @@ public class MapsActivityGetRaite extends FragmentActivity implements OnMapReady
         super.onCreate(savedInstanceState);
         getPermissions();
         final Bundle pass = getIntent().getExtras();
-        getPermissions();
 
         setContentView(R.layout.activity_maps_get_raite);
         if (android.os.Build.VERSION.SDK_INT > 9) {
@@ -62,12 +60,6 @@ public class MapsActivityGetRaite extends FragmentActivity implements OnMapReady
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
-        final Button button = (Button) findViewById(R.id.btnRoute);
-        button.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                getRoute();
-            }
-        });
 
         final Button buttonHme = (Button) findViewById(R.id.btnHome);
         buttonHme.setOnClickListener(new View.OnClickListener() {
@@ -105,8 +97,6 @@ public class MapsActivityGetRaite extends FragmentActivity implements OnMapReady
     @Override
     public void onLocationChanged(Location location) {
 
-            awsHelper.rec.saveRecord("spoopy", "ProjectLemonStream");
-            //Toast.makeText(this, ex.toString(), Toast.LENGTH_LONG).show();
 
         try{
 
@@ -174,86 +164,6 @@ public class MapsActivityGetRaite extends FragmentActivity implements OnMapReady
             Toast.makeText(this, "permission denied", Toast.LENGTH_LONG).show();
         }
     }
-
-    private void getRoute(){
-        String url = "https://maps.googleapis.com/maps/api/directions/json?origin="
-                + myLatLng.latitude + "," + myLatLng.longitude +
-                "&destination=" + latLngCetys.latitude + "," + latLngCetys.longitude +
-                "&key=AIzaSyCq7XqwYUeGOVLqs4FzvjDrYYRGLEar3-A";
-        RetrieveFeedTask2 r = new RetrieveFeedTask2();
-        r.myLatLng = myLatLng;
-        r.latLngCetys = latLngCetys;
-        r.execute();
-        awsHelper.rec.submitAllRecords();
-        awsHelper.rec.deleteAllRecords();
-        Toast.makeText(this, "It WORKS!", Toast.LENGTH_LONG).show();
-    }
-
-
-
-
-}
-
-class RetrieveFeedTask2 extends AsyncTask<Void, Void, String> {
-    private Exception exception;
-    public LatLng myLatLng;
-    public LatLng latLngCetys;
-
-    protected void onPreExecute() {
-
-    }
-
-    protected String doInBackground(Void... urls) {
-       //String email = emailText.getText().toString();
-        // Do some validation here
-
-        try {
-            URL url = new URL("https://maps.googleapis.com/maps/api/directions/json?origin="
-                    + myLatLng.latitude + "," + myLatLng.longitude +
-                    "&destination=" + latLngCetys.latitude + "," + latLngCetys.longitude +
-                    "&key=AIzaSyCq7XqwYUeGOVLqs4FzvjDrYYRGLEar3-A");
-            HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
-            try {
-                BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(urlConnection.getInputStream()));
-                StringBuilder stringBuilder = new StringBuilder();
-                String line;
-                while ((line = bufferedReader.readLine()) != null) {
-                    stringBuilder.append(line).append("\n");
-                }
-                bufferedReader.close();
-                return stringBuilder.toString();
-            }
-            finally{
-                urlConnection.disconnect();
-            }
-        }
-        catch(Exception e) {
-            return null;
-        }
-    }
-
-    protected void onPostExecute(String response) {
-        if(response == null) {
-            response = "THERE WAS AN ERROR";
-        }else {
-
-            String s = response;
-        }
-        //
-        // TODO: check this.exception
-        // TODO: do something with the feed
-        /*
-
-            try {
-                JSONObject object = (JSONObject) new JSONTokener(response).nextValue();
-                String s = (String) object.get("status");
-
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }*/
-    }
-
-
 
 }
 
