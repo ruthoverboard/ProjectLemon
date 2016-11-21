@@ -50,7 +50,7 @@ public class UserProfileActivity extends AppCompatActivity {
 
 
         if(extras != null){
-            career = extras.getString("Career");
+            career = extras.getString("career");
         }
 
 

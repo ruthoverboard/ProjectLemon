@@ -59,10 +59,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         LocationListener {
 
 
-<<<<<<< HEAD
-<<<<<<< HEAD 
-=======
->>>>>>> 108bbb4ffd854eb30096cc73e0c73543ca3051bc
     private GoogleMap mMap;
     private Location myLocation;
     LatLng latLngCetys = new LatLng(32.50660123141241, -116.92439664155245);
