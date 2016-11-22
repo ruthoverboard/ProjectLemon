@@ -9,6 +9,7 @@ import com.amazonaws.mobileconnectors.kinesis.kinesisrecorder.KinesisRecorder;
 import com.amazonaws.regions.Regions;
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDBClient;
 import com.amazonaws.mobileconnectors.dynamodbv2.dynamodbmapper.*;
+import com.amazonaws.mobileconnectors.lambdainvoker.*;
 
 
 import java.io.File;
@@ -28,6 +29,8 @@ public class AWSHelper {
                 Regions.US_EAST_1 // Region
         );
         String path = "CetysCarpool";
+        File dir = getApplicationContext().getDir(path, 0);
+        dir.delete();
         try{
             rec = new KinesisRecorder(
                     getApplicationContext().getDir(path, 0), // An empty directory KinesisRecorder can use for storing requests
@@ -39,6 +42,7 @@ public class AWSHelper {
             //Toast.makeText(this, ex.toString(), Toast.LENGTH_LONG).show();
 
         }
+
 
 
     }

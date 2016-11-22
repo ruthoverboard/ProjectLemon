@@ -60,7 +60,10 @@
             android:name=".MapsActivity"
             android:label="@string/title_activity_maps" />
         <activity android:name=".UserProfileActivity" />
-        <activity android:name=".firstLogin"></activity>
+        <activity android:name=".firstLogin" />
+        <activity android:name=".askPhoneNumber"></activity>
     </application>
+
+    <uses-permission android:name="android.permission.INTERNET"></uses-permission>
 
 </manifest>

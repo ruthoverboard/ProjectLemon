@@ -30,12 +30,12 @@ public class firstLogin extends AppCompatActivity {
 
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(firstLogin.this, UserProfileActivity.class);
+                Intent intent = new Intent(firstLogin.this, askPhoneNumber.class);
                 Bundle bndl = new Bundle();
 
                 if(career != null){
                     //intent.putExtra("Career", career);
-                    bndl.putString("Career", career);
+                    bndl.putString("career", career);
                     intent.putExtras(bndl);
                 }
                 startActivity(intent);

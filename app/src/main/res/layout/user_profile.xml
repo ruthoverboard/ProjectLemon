@@ -95,7 +95,7 @@
         android:text="Dar raite"
         android:layout_width="115dp"
         android:layout_height="50dp"
-        android:id="@+id/btnPedirRaite"
+        android:id="@+id/btnDarRaite"
         android:layout_marginLeft="11dp"
         android:layout_marginStart="11dp"
         android:layout_above="@+id/fb_share_btn"
@@ -106,7 +106,7 @@
         android:text="Pedir raite"
         android:layout_width="115dp"
         android:layout_height="50dp"
-        android:id="@+id/btnDarRaite"
+        android:id="@+id/btnPedirRaite"
         android:layout_above="@+id/fb_share_btn"
         android:layout_alignRight="@+id/img"
         android:layout_alignEnd="@+id/img" />

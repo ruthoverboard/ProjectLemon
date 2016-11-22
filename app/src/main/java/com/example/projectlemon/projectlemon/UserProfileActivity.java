@@ -36,6 +36,8 @@ import java.net.URLConnection;
 public class UserProfileActivity extends AppCompatActivity {
 
     String career;
+    sqlConnection con = new sqlConnection();
+    String[] data;
 
     @Override
     public void onBackPressed() {
@@ -50,7 +52,7 @@ public class UserProfileActivity extends AppCompatActivity {
 
 
         if(extras != null){
-            career = extras.getString("Career");
+            career = extras.getString("career");
         }
 
 
