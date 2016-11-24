@@ -26,7 +26,6 @@ import android.widget.Toast;
 import com.facebook.AccessToken;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
-//Adrian: Estaba causando un error de mi lado
 //import com.google.android.gms.common.internal.GetServiceRequest;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -211,9 +210,10 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         r.latLngCetys = latLngCetys;
         //r.execute();
         */
-        String query = idTrip+","+count+","+lastKnownLocation.getLatitude()+","+lastKnownLocation.getLongitude();
+        String query = idTrip+","+count+","+lastKnownLocation.getLongitude()+","+lastKnownLocation.getLatitude();
         awsHelper.rec.saveRecord(query, "ProjectLemonStream");
         awsHelper.rec.submitAllRecords();
+        awsHelper.rec.deleteAllRecords();
         count++;
         Toast.makeText(this, "It WORKS!", Toast.LENGTH_LONG).show();
     }

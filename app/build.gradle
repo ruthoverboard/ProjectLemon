@@ -41,9 +41,5 @@ dependencies {
     compile 'com.amazonaws:aws-android-sdk-ddb-mapper:2.2.+'
     compile 'com.amazonaws:aws-android-sdk-lambda:2.2.+'
     testCompile 'junit:junit:4.12'
-<<<<<<< HEAD
 
-
-=======
->>>>>>> 407433c0d78ba53aae053ab58891095b60788714
 }

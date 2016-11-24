@@ -59,7 +59,8 @@
 
         <activity
             android:name=".MapsActivity"
-            android:label="@string/title_activity_maps" />
+            android:label="@string/title_activity_maps"
+            android:exported="true"/>
         <activity android:name=".UserProfileActivity" />
         <activity android:name=".firstLogin" />
         <activity android:name=".askPhoneNumber" />
