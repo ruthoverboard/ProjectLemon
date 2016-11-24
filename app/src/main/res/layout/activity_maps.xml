@@ -21,6 +21,12 @@
         android:layout_weight="10"
         android:weightSum="1">
 
+        <Button
+            android:text="Dar Raite"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:id="@+id/btnRoute"
+            android:layout_weight="0.41" />
 
         <Button
             android:text="Perfil"
@@ -29,11 +35,6 @@
             android:id="@+id/btnHome"
             android:layout_weight="0.47" />
 
-        <Button
-            android:text="Pedir Ruta"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:id="@+id/btnRoute"
-            android:layout_weight="0.41" />
+
     </LinearLayout>
 </LinearLayout>

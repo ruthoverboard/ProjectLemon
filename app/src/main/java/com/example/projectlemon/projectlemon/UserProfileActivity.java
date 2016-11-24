@@ -36,7 +36,6 @@ import java.net.URLConnection;
 public class UserProfileActivity extends AppCompatActivity {
 
     String career;
-    sqlConnection con = new sqlConnection();
     String[] data;
 
     @Override
@@ -133,7 +132,7 @@ public class UserProfileActivity extends AppCompatActivity {
         btnGetRaite.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
 
-                startActivity(new Intent(UserProfileActivity.this, MapsActivityGetRaite.class));
+                startActivity(new Intent(UserProfileActivity.this, MapsActivityPedirRaite.class));
             }
         });
 
