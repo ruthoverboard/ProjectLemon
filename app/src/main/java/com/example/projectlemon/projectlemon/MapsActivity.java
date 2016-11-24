@@ -65,6 +65,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     static AWSHelper awsHelper = AWSHelper.getInstance();
     Double latSend, longSend;
     Location lastKnownLocation;
+    int idTrip =1;
+    int count = 1;
 
 
     @Override
@@ -126,10 +128,10 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     public void onLocationChanged(Location location) {
         //latSend = location.getLatitude();
         //longSend = location.getLongitude();
-
+        lastKnownLocation = location;
         if(Math.abs(location.getLatitude() - lastKnownLocation.getLatitude()) >= .001 ){
 
-            lastKnownLocation.setLatitude(location.getLatitude());
+            //lastKnownLocation.setLatitude(location.getLatitude());
         }
         try{
 
@@ -208,9 +210,10 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         r.latLngCetys = latLngCetys;
         //r.execute();
         */
-        awsHelper.rec.saveRecord("mudabull", "ProjectLemonStream");
+        String query = idTrip+","+count+","+lastKnownLocation.getLatitude()+","+lastKnownLocation.getLongitude();
+        awsHelper.rec.saveRecord(query, "ProjectLemonStream");
         awsHelper.rec.submitAllRecords();
-        awsHelper.rec.deleteAllRecords();
+        count++;
         Toast.makeText(this, "It WORKS!", Toast.LENGTH_LONG).show();
     }
 

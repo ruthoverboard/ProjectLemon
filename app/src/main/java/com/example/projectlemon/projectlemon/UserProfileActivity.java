@@ -36,7 +36,6 @@ import java.net.URLConnection;
 public class UserProfileActivity extends AppCompatActivity {
 
     String career;
-    sqlConnection con = new sqlConnection();
     String[] data;
 
     @Override
