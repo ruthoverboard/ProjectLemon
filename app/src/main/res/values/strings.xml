@@ -13,4 +13,5 @@
         <item>Ingeniería Industrial</item>
         <item>Inteniería Mecánica</item>
     </string-array>
+    <string name="title_activity_maps_pedir_raite">Cetys Carpool</string>
 </resources>
