@@ -26,7 +26,8 @@ import android.widget.Toast;
 import com.facebook.AccessToken;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.common.internal.GetServiceRequest;
+//Adrian: Estaba causando un error de mi lado
+//import com.google.android.gms.common.internal.GetServiceRequest;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
