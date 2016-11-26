@@ -120,6 +120,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         }catch (SecurityException ex){
             Toast.makeText(this, ex.toString(), Toast.LENGTH_LONG).show();
         }
+
+
+
     }
 
 
