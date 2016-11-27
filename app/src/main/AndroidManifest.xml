@@ -66,6 +66,7 @@
         <activity android:name=".askPhoneNumber" />
         <activity
             android:name=".MapsActivityPedirRaite"
+<<<<<<< HEAD
             android:label="@string/title_activity_maps_pedir_raite"></activity>
         <service
             android:name=".FirebaseMessagesServices">
@@ -79,6 +80,9 @@
                 <action android:name="com.google.firebase.INSTANCE_ID_EVENT"/>
             </intent-filter>
         </service>
+=======
+            android:label="@string/title_activity_maps_pedir_raite" />
+>>>>>>> d2ce63855c3940737c7741efe300cbcb2ade951f
     </application>
 
 </manifest>
