@@ -15,6 +15,9 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.facebook.AccessToken;
+import com.facebook.GraphRequest;
+import com.facebook.GraphResponse;
 import com.loopj.android.http.*;
 
 import org.json.JSONArray;
@@ -58,7 +61,85 @@ public class askPhoneNumber extends AppCompatActivity {
                     bndl.putString("career", career);
                     intent.putExtras(bndl);
 
-                    String url = "https://p4x0vleufi.execute-api.us-east-1.amazonaws.com/dev/createUser";
+                    final String url = "https://p4x0vleufi.execute-api.us-east-1.amazonaws.com/dev/createUser";
+
+                    AccessToken accessToken = AccessToken.getCurrentAccessToken();
+
+                    GraphRequest request = GraphRequest.newMeRequest(
+                            accessToken,
+                            new GraphRequest.GraphJSONObjectCallback() {
+                                @Override
+                                public void onCompleted(
+                                        JSONObject object,
+                                        GraphResponse response) {
+                                    // Application code
+                                    try {
+                                        //JSONObject obj = new JSONObject();
+                                        /*try {
+                                            obj.put("id", object.getString("id"));
+                                            obj.put("name", object.getString("name"));
+                                            obj.put("phoneNumber", phoneNumber);
+                                            obj.put("career", career);
+                                            obj.put("email", object.getString("email"));
+                                        } catch (JSONException e) {
+                                            e.printStackTrace();
+                                        }*/
+                                        StringEntity params = null;
+                                        try {
+                                            params = new StringEntity("{ "
+                                                    + "\"id\": " + object.getString("id")
+                                                    + ", \"name\": " + "\"" + object.getString("name") + "\""
+                                                    + ", \"phoneNumber\": " + "\"" + 98765421 + "\""
+                                                    + ", \"career\": " + "\"" + career + "\""
+                                                    + ", \"email\": " + "\"" + object.getString("email") + "\""
+                                                    +  " }");
+
+                                        } catch (UnsupportedEncodingException e) {
+                                            e.printStackTrace();
+                                        }
+                                        Log.d("num", phoneNumber);
+                                        Log.d("str", "{ "
+                                                + "\"id\": " + object.getString("id")
+                                                + ", \"name\": " + "\"" + object.getString("name") + "\""
+                                                + ", \"phoneNumber\": " + "\"" + phoneNumber + "\""
+                                                + ", \"career\": " + "\"" + career + "\""
+                                                + ", \"email\": " + "\"" + object.getString("email") + "\""
+                                                +  " }");
+                                        AsyncHttpClient client = new AsyncHttpClient();
+                                        client.post(getApplicationContext(), url, params, "application/json", new AsyncHttpResponseHandler() {
+                                            @Override
+                                            public void onStart() {
+                                                // Initiated the request
+                                            }
+
+                                            @Override
+                                            public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
+                                                // Successfully got a response
+                                                Log.d("yay", String.valueOf(responseBody));
+                                                startActivity(intent);
+                                            }
+
+                                            @Override
+                                            public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
+
+                                                Log.d("nope", String.valueOf(error));
+                                            }
+
+                                        });
+
+
+                                    } catch (JSONException e) {
+
+                                    }
+                                    Log.d("json:", object.toString());
+                                }
+                            });
+
+                    Bundle parameters = new Bundle();
+                    parameters.putString("fields", "id, email, name");
+                    request.setParameters(parameters);
+                    request.executeAsync();
+
 
                     //JSONObject params = new JSONObject();
 
@@ -67,57 +148,8 @@ public class askPhoneNumber extends AppCompatActivity {
                     //params.put("name", "asd");
                     //params.put("email", "asd");
                     //params.put("phoneNumber", "6642214815");
-                    JSONObject obj = new JSONObject();
-                    try {
-                        obj.put("id", 123456);
-                        obj.put("name", "Noelia");
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-
                     //RequestParams params = new RequestParams("par", obj.toString());
 
-                    StringEntity params = null;
-                    try {
-                        params = new StringEntity("{\"id\": 9999, \"name\":\"Noelia\"}");
-                    } catch (UnsupportedEncodingException e) {
-                        e.printStackTrace();
-                    }
-                    AsyncHttpClient client = new AsyncHttpClient();
-                    client.post(getApplicationContext(), url, params, "application/json", new AsyncHttpResponseHandler() {
-                                @Override
-                                public void onStart() {
-                                    // Initiated the request
-                                }
-
-                                @Override
-                                public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
-                                    // Successfully got a response
-                                    Log.d("yay", String.valueOf(responseBody));
-                                    startActivity(intent);
-                                }
-
-                                @Override
-                                public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
-
-                                    Log.d("nope", String.valueOf(error));
-                                }
-
-                            }
-
-                            /*new JsonHttpResponseHandler() {
-                        @Override
-                        public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
-                            startActivity(intent);
-                            Log.d("nope", responseString);
-                        }
-
-                        @Override
-                        public void onSuccess(int statusCode, Header[] headers, String responseString) {
-                            Log.d("yay", responseString);
-                        }
-                    }
-                    */);
 
                 }
                 //startActivity(intent);
