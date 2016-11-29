@@ -40,6 +40,7 @@ dependencies {
     compile 'com.amazonaws:aws-android-sdk-kinesis:2.2.+'
     compile 'com.amazonaws:aws-android-sdk-ddb-mapper:2.2.+'
     compile 'com.amazonaws:aws-android-sdk-lambda:2.2.+'
+    compile 'com.loopj.android:android-async-http:1.4.9'
     testCompile 'junit:junit:4.12'
 
 }

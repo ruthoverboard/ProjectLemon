@@ -55,11 +55,6 @@ public class UserProfileActivity extends AppCompatActivity {
         }
 
 
-
-
-
-        //final Bundle extras = getIntent().getExtras();
-
         AccessToken accessToken = AccessToken.getCurrentAccessToken();
 
         GraphRequest request = GraphRequest.newMeRequest(
@@ -79,7 +74,6 @@ public class UserProfileActivity extends AppCompatActivity {
                         }
 
 
-                        //txtName.setText(extras.getString("token"));
                         try {
                             txtName.setText(object.getString("name"));
 
