@@ -14,6 +14,8 @@ import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
 import com.facebook.FacebookSdk;
+import com.facebook.GraphRequest;
+import com.facebook.GraphResponse;
 import com.facebook.Profile;
 import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
@@ -23,6 +25,7 @@ import com.loopj.android.http.JsonHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.UnsupportedEncodingException;
@@ -48,6 +51,9 @@ public class MainActivity extends AppCompatActivity {
         LoginButton loginButton = (LoginButton) findViewById(R.id.login_button);
         loginButton.setReadPermissions("email", "public_profile", "user_friends");
 
+
+
+
         final Button button = (Button) findViewById(R.id.btnMaps);
         button.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
@@ -60,62 +66,83 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void onSuccess(LoginResult loginResult) {
                         //query que manda a buscar al usuario
-                        String url = "https://p4x0vleufi.execute-api.us-east-1.amazonaws.com/dev/searchUser/12";
 
-                        //StringEntity param = null;
-                        //try {
-                        //    param = new StringEntity("12");
-                        //} catch (UnsupportedEncodingException e) {
-                        //    e.printStackTrace();
-                        //}
-                        //RequestParams params = new RequestParams();
-                        //params.put()
-                        //params.put("id", 12);
+                        final AccessToken accessToken = AccessToken.getCurrentAccessToken();
+                        Log.d("e", accessToken.toString());
+                        GraphRequest request = GraphRequest.newMeRequest(
+                                accessToken,
+                                new GraphRequest.GraphJSONObjectCallback() {
+                                    @Override
+                                    public void onCompleted(
+                                            JSONObject object,
+                                            GraphResponse response) {
+                                        // Application code
+                                        String idUser = null;
+                                        try {
+                                            idUser = object.getString("id");
+                                            Log.d("request", idUser);
+                                        } catch (JSONException e) {
+                                            e.printStackTrace();
+                                        }
+                                        Log.d("json:", object.toString());
+
+                                        String url = "https://p4x0vleufi.execute-api.us-east-1.amazonaws.com/dev/searchUser/" + idUser;
+                                        Log.d("url", url);
+                                        AsyncHttpClient client = new AsyncHttpClient();
+                                        final String finalIdUser = idUser;
+                                        client.get(url, new JsonHttpResponseHandler() {
+                                            @Override
+                                            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
+                                                //super.onFailure(statusCode, headers, throwable, errorResponse);
+                                                Log.d("nope", String.valueOf(errorResponse));
+
+                                            }
+                                            @Override
+                                            public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
+                                                super.onSuccess(statusCode, headers, response);
+                                                Log.d("yay2", response.toString());
+                                                try {
+                                                    String idUserDB = response.getJSONObject(0).get("idUser").toString();
+                                                    Log.d("yay2", idUserDB);
+                                                    if(finalIdUser == idUserDB) {
+                                                        startActivity(new Intent(MainActivity.this, UserProfileActivity.class));
+                                                    }
+                                                    else{
+                                                        startActivity(new Intent(MainActivity.this, firstLogin.class));
+                                                    }
+                                                } catch (JSONException e) {
+                                                    e.printStackTrace();
+                                                }
 
 
-                        //Log.d("err:", params.toString());
-                        AsyncHttpClient client = new AsyncHttpClient();
-                        client.get(url, new JsonHttpResponseHandler(){
-                            @Override
-                            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
-                                super.onSuccess(statusCode, headers, response);
-                                Log.d("yay", response.toString());
-                            }
+                                            }
+                                            @Override
+                                            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONArray errorResponse) {
+                                                super.onFailure(statusCode, headers, throwable, errorResponse);
+                                                Log.d("nope2", String.valueOf(errorResponse));
 
-                            @Override
-                            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
-                                //super.onFailure(statusCode, headers, throwable, errorResponse);
-                                Log.d("nope", String.valueOf(errorResponse));
 
-                            }
+                                            }
+                                            @Override
+                                            public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
+                                                super.onFailure(statusCode, headers, responseString, throwable);
+                                                Log.d("nope3", String.valueOf(responseString));
+                                                startActivity(new Intent(MainActivity.this, firstLogin.class));
+                                            }
+                                        });
+                                    }
+                                });
+                        Bundle parameters = new Bundle();
+                        parameters.putString("fields", "id");
+                        request.setParameters(parameters);
+                        request.executeAsync();
 
-                            @Override
-                            public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
-                                super.onSuccess(statusCode, headers, response);
-                                Log.d("yay2", response.toString());
-                            }
 
-                            @Override
-                            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONArray errorResponse) {
-                                super.onFailure(statusCode, headers, throwable, errorResponse);
-                                Log.d("nope2", String.valueOf(errorResponse));
-                            }
 
-                            @Override
-                            public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
-                                super.onFailure(statusCode, headers, responseString, throwable);
-                                Log.d("nope3", String.valueOf(responseString));
-                            }
 
-                            @Override
-                            public void onSuccess(int statusCode, Header[] headers, String responseString) {
-                                super.onSuccess(statusCode, headers, responseString);
-                                Log.d("yay3", responseString);
-                            }
-                        });
 
-                        AccessToken accessToken = loginResult.getAccessToken();
-                        Profile profile = Profile.getCurrentProfile();
+                        //AccessToken accessToken = loginResult.getAccessToken();
+                        //Profile profile = Profile.getCurrentProfile();
 
                         //Bundle pass = new Bundle();
                         //Intent intent = new Intent(getApplicationContext(), UserProfileActivity.class);
@@ -124,7 +151,7 @@ public class MainActivity extends AppCompatActivity {
                         //intent.putExtras(pass);
                         //intent.putExtra("profile", profile.getName());
                         //startActivity(intent);
-                        startActivity(new Intent(MainActivity.this, firstLogin.class));
+
                     }
 
                     @Override
