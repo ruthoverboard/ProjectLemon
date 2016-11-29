@@ -4,6 +4,9 @@ android {
     compileSdkVersion 24
     buildToolsVersion '25.0.1'
 
+
+
+
     repositories {
         mavenCentral()
     }
@@ -26,12 +29,17 @@ android {
 
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
-    androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
-        exclude group: 'com.android.support', module: 'support-annotations'
-    })
+    //androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
+    //    exclude group: 'com.android.support', module: 'support-annotations'
+    //})
+    compile 'com.google.firebase:firebase-core:10.0.0'
 
+
+    //apply plugin: 'com.google.gms.google-services'
     compile 'com.android.support:appcompat-v7:24.2.1'
+    compile 'com.google.firebase:firebase-messaging:10.0.0'
     compile 'com.facebook.android:facebook-android-sdk:4.15.0'
+    //noinspection GradleCompatible
     compile 'com.google.android.gms:play-services:10.0.0'
     compile 'com.android.support:design:24.2.1'
     compile 'com.amazonaws:aws-android-sdk-core:2.2.+'
@@ -44,3 +52,5 @@ dependencies {
     testCompile 'junit:junit:4.12'
 
 }
+
+apply plugin: 'com.google.gms.google-services'
