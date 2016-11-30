@@ -51,6 +51,8 @@ import com.amazonaws.regions.Regions;
 import com.amazonaws.services.dynamodbv2.*;
 //import com.amazonaws.mobileconnectors.dynamodbv2.dynamodbmapper.*;
 import java.security.Provider;
+import com.google.firebase.messaging.FirebaseMessagingService;
+import com.google.firebase.messaging.FirebaseMessaging;
 
 import static com.facebook.FacebookSdk.getApplicationContext;
 
@@ -67,6 +69,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     Location lastKnownLocation;
     int idTrip =1;
     int count = 1;
+    String query;
+    boolean tripActive = false;
 
 
     @Override
@@ -110,14 +114,15 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
         getPermissions();
-
-        LocationManager locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
         try {
+            LocationManager locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
             locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, this);
             myLocation = locationManager.getLastKnownLocation(locationManager.GPS_PROVIDER);
             lastKnownLocation = myLocation;
             mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(myLocation.getLatitude(),myLocation.getLongitude()), 17));
         }catch (SecurityException ex){
+            Toast.makeText(this, ex.toString(), Toast.LENGTH_LONG).show();
+        }catch (Exception ex){
             Toast.makeText(this, ex.toString(), Toast.LENGTH_LONG).show();
         }
 
@@ -131,13 +136,18 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     public void onLocationChanged(Location location) {
         //latSend = location.getLatitude();
         //longSend = location.getLongitude();
-        lastKnownLocation = location;
-        if(Math.abs(location.getLatitude() - lastKnownLocation.getLatitude()) >= .001 ){
 
-            //lastKnownLocation.setLatitude(location.getLatitude());
-        }
         try{
-
+            if((Math.abs(Math.abs(location.getLatitude()) - Math.abs(lastKnownLocation.getLatitude())) >= .001 ||
+                    Math.abs(Math.abs(location.getLongitude()) - Math.abs(lastKnownLocation.getLongitude())) >= .001)
+                    && tripActive ){
+                query = idTrip+","+count+","+lastKnownLocation.getLongitude()+","+lastKnownLocation.getLatitude();
+                awsHelper.rec.saveRecord(query, "ProjectLemonStream");
+                awsHelper.rec.submitAllRecords();
+                awsHelper.rec.deleteAllRecords();
+                count++;
+                lastKnownLocation = location;
+            }
         }catch (Exception ex){
             Toast.makeText(this, ex.toString(), Toast.LENGTH_LONG).show();
 
@@ -213,11 +223,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         r.latLngCetys = latLngCetys;
         //r.execute();
         */
-        String query = idTrip+","+count+","+lastKnownLocation.getLongitude()+","+lastKnownLocation.getLatitude();
-        awsHelper.rec.saveRecord(query, "ProjectLemonStream");
-        awsHelper.rec.submitAllRecords();
-        awsHelper.rec.deleteAllRecords();
-        count++;
+
         Toast.makeText(this, "It WORKS!", Toast.LENGTH_LONG).show();
     }
 

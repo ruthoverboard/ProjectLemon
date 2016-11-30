@@ -1,5 +1,6 @@
 package com.example.projectlemon.projectlemon;
 
+import android.location.Location;
 import android.os.Environment;
 import android.widget.Toast;
 
@@ -21,6 +22,7 @@ public class AWSHelper {
     private static AWSHelper aws;
     public static CognitoCredentialsProvider credentialsProvider;
     public static KinesisRecorder rec;
+    public static Location driver;
 
     private AWSHelper(){
         credentialsProvider = new CognitoCachingCredentialsProvider(
