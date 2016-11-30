@@ -29,6 +29,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.UnsupportedEncodingException;
+import java.math.BigInteger;
 
 import cz.msebera.android.httpclient.Header;
 import cz.msebera.android.httpclient.entity.StringEntity;
@@ -99,18 +100,21 @@ public class MainActivity extends AppCompatActivity {
                                             }
                                             @Override
                                             public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
-                                                super.onSuccess(statusCode, headers, response);
+                                                //super.onSuccess(statusCode, headers, response);
                                                 Log.d("yay2", response.toString());
                                                 try {
                                                     String idUserDB = response.getJSONObject(0).get("idUser").toString();
                                                     Log.d("yay2", idUserDB);
-                                                    if(finalIdUser == idUserDB) {
+                                                    Log.d("yay22", finalIdUser);
+                                                    if(finalIdUser.equals(idUserDB)) {
+                                                        Log.d("wtf", finalIdUser);
                                                         startActivity(new Intent(MainActivity.this, UserProfileActivity.class));
                                                     }
                                                     else{
                                                         startActivity(new Intent(MainActivity.this, firstLogin.class));
                                                     }
                                                 } catch (JSONException e) {
+                                                    startActivity(new Intent(MainActivity.this, firstLogin.class));
                                                     e.printStackTrace();
                                                 }
 
@@ -136,10 +140,6 @@ public class MainActivity extends AppCompatActivity {
                         parameters.putString("fields", "id");
                         request.setParameters(parameters);
                         request.executeAsync();
-
-
-
-
 
                         //AccessToken accessToken = loginResult.getAccessToken();
                         //Profile profile = Profile.getCurrentProfile();
