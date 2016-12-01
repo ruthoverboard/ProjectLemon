@@ -13,7 +13,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
-
+import com.loopj.android.http.*;
 import com.amazonaws.regions.Regions;
 import com.facebook.AccessToken;
 import com.facebook.GraphRequest;
