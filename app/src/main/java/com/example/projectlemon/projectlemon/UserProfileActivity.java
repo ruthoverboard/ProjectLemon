@@ -119,6 +119,7 @@ public class UserProfileActivity extends AppCompatActivity {
 
         //base de datos
 
+        
         //Dar raite
         Button btnMaps = (Button) findViewById(R.id.btnDarRaite);
         btnMaps.setOnClickListener(new View.OnClickListener() {
