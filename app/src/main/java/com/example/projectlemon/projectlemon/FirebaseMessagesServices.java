@@ -29,12 +29,14 @@ public class FirebaseMessagesServices extends FirebaseMessagingService {
         Log.d(TAG, "DATAAAAAA: " + remoteMessage.getData());
         Object[] data = remoteMessage.getData().values().toArray();
         Toast.makeText(this,remoteMessage.toString(),Toast.LENGTH_LONG);
+        String title = remoteMessage.getNotification().getTitle();
 
         //Calling method to generate notification
-        if (data[data.length-1].equals("Notification")) {
-            sendNotification(remoteMessage.getNotification().getTitle(),remoteMessage.getNotification().getBody());
-        }else {
+        if (title.equals("location")) {
             sendLocation(data);
+        }else {
+            sendNotification(remoteMessage.getNotification().getTitle(),remoteMessage.getNotification().getBody());
+
         }
     }
 
@@ -64,7 +66,7 @@ public class FirebaseMessagesServices extends FirebaseMessagingService {
 
 
     private void sendLocation(Object[] data){
-        //AWSHelper.driver.setLatitude(Double.parseDouble(data[0].toString()));
-        //AWSHelper.driver.setLongitude(Double.parseDouble(data[1].toString()));
+        awsHelper.driver.setLatitude(Float.parseFloat(data[0].toString()));
+        awsHelper.driver.setLongitude(Float.parseFloat(data[1].toString()));
     }
 }

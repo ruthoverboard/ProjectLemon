@@ -11,6 +11,7 @@ import com.amazonaws.regions.Regions;
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDBClient;
 import com.amazonaws.mobileconnectors.dynamodbv2.dynamodbmapper.*;
 import com.amazonaws.mobileconnectors.lambdainvoker.*;
+import com.google.firebase.iid.FirebaseInstanceId;
 
 
 import java.io.File;
@@ -23,6 +24,7 @@ public class AWSHelper {
     public static CognitoCredentialsProvider credentialsProvider;
     public static KinesisRecorder rec;
     public static Location driver;
+    public static String key = FirebaseInstanceId.getInstance().getToken();
 
     private AWSHelper(){
         credentialsProvider = new CognitoCachingCredentialsProvider(

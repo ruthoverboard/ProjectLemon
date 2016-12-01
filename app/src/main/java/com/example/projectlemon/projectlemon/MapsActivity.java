@@ -119,6 +119,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, this);
             myLocation = locationManager.getLastKnownLocation(locationManager.GPS_PROVIDER);
             lastKnownLocation = myLocation;
+            awsHelper.driver = myLocation;
             mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(myLocation.getLatitude(),myLocation.getLongitude()), 17));
         }catch (SecurityException ex){
             Toast.makeText(this, ex.toString(), Toast.LENGTH_LONG).show();
@@ -138,9 +139,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         //longSend = location.getLongitude();
 
         try{
-            if((Math.abs(Math.abs(location.getLatitude()) - Math.abs(lastKnownLocation.getLatitude())) >= .001 ||
+            if(Math.abs(Math.abs(location.getLatitude()) - Math.abs(lastKnownLocation.getLatitude())) >= .001 ||
                     Math.abs(Math.abs(location.getLongitude()) - Math.abs(lastKnownLocation.getLongitude())) >= .001)
-                    && tripActive ){
+            {
                 query = idTrip+","+count+","+lastKnownLocation.getLongitude()+","+lastKnownLocation.getLatitude();
                 awsHelper.rec.saveRecord(query, "ProjectLemonStream");
                 awsHelper.rec.submitAllRecords();
@@ -223,7 +224,11 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         r.latLngCetys = latLngCetys;
         //r.execute();
         */
-
+        query = idTrip+","+count+","+lastKnownLocation.getLongitude()+","+lastKnownLocation.getLatitude()+","+ awsHelper.key;
+        awsHelper.rec.saveRecord(query, "ProjectLemonStream");
+        awsHelper.rec.submitAllRecords();
+        awsHelper.rec.deleteAllRecords();
+        count++;
         Toast.makeText(this, "It WORKS!", Toast.LENGTH_LONG).show();
     }
 
