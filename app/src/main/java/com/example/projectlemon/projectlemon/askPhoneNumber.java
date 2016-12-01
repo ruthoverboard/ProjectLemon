@@ -43,8 +43,7 @@ public class askPhoneNumber extends AppCompatActivity {
         if(extras != null){
             career = extras.getString("career");
         }
-        EditText phone = (EditText)findViewById(R.id.txtPhone);
-        phoneNumber = phone.getText().toString();
+
 
 
 
@@ -54,12 +53,17 @@ public class askPhoneNumber extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 final Intent intent = new Intent(askPhoneNumber.this, UserProfileActivity.class);
-                Bundle bndl = new Bundle();
+                //Bundle bndl = new Bundle();
+
+                EditText phone = (EditText)findViewById(R.id.txtPhone);
+                phoneNumber = phone.getText().toString();
 
                 if(phoneNumber != null){
-                    bndl.putString("phoneNumber", phoneNumber);
-                    bndl.putString("career", career);
-                    intent.putExtras(bndl);
+                    //bndl.putString("phoneNumber", phoneNumber);
+                    //bndl.putString("career", career);
+                    //intent.putExtras(bndl);
+
+
 
                     final String url = "https://p4x0vleufi.execute-api.us-east-1.amazonaws.com/dev/createUser";
 
@@ -89,7 +93,7 @@ public class askPhoneNumber extends AppCompatActivity {
                                             params = new StringEntity("{ "
                                                     + "\"id\": " + object.getString("id")
                                                     + ", \"name\": " + "\"" + object.getString("name") + "\""
-                                                    + ", \"phoneNumber\": " + "\"" + 98765421 + "\""
+                                                    + ", \"phoneNumber\": " + "\"" + phoneNumber + "\""
                                                     + ", \"career\": " + "\"" + career + "\""
                                                     + ", \"email\": " + "\"" + object.getString("email") + "\""
                                                     +  " }");
@@ -98,13 +102,7 @@ public class askPhoneNumber extends AppCompatActivity {
                                             e.printStackTrace();
                                         }
                                         Log.d("num", phoneNumber);
-                                        Log.d("str", "{ "
-                                                + "\"id\": " + object.getString("id")
-                                                + ", \"name\": " + "\"" + object.getString("name") + "\""
-                                                + ", \"phoneNumber\": " + "\"" + phoneNumber + "\""
-                                                + ", \"career\": " + "\"" + career + "\""
-                                                + ", \"email\": " + "\"" + object.getString("email") + "\""
-                                                +  " }");
+
                                         AsyncHttpClient client = new AsyncHttpClient();
                                         client.post(getApplicationContext(), url, params, "application/json", new AsyncHttpResponseHandler() {
                                             @Override
