@@ -31,6 +31,10 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptor;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
+import com.google.android.gms.maps.model.GroundOverlay;
+import com.google.android.gms.maps.model.GroundOverlayOptions;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
@@ -94,6 +98,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             }
         });
 
+
         final Button buttonHme = (Button) findViewById(R.id.btnHome);
         buttonHme.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
@@ -126,8 +131,10 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         }catch (Exception ex){
             Toast.makeText(this, ex.toString(), Toast.LENGTH_LONG).show();
         }
-
-
+        GroundOverlayOptions driveOptions = new GroundOverlayOptions()
+                .image(BitmapDescriptorFactory.fromResource(R.drawable.com_facebook_button_icon_blue))
+                .position(new LatLng(myLocation.getLatitude(), myLocation.getLongitude()),30f,20f);
+        GroundOverlay driverIcon = googleMap.addGroundOverlay(driveOptions);
 
     }
 
