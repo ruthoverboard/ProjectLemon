@@ -148,7 +148,7 @@ public class UserProfileActivity extends AppCompatActivity {
 
 
                         } catch (JSONException e) {
-                            txtFriends.setText("fallo");
+                            //txtFriends.setText("fallo");
                         }
                         Log.d("json:", object.toString());
 
@@ -189,6 +189,10 @@ public class UserProfileActivity extends AppCompatActivity {
 
     }
 
+
+
+
+    //new DownloadImageTask((ImageView) findViewById(R.id.imgProfile)).execute(picture.getString("url"));
     private class DownloadImageTask extends AsyncTask<String, Void, Bitmap> {
         ImageView bmImage;
 

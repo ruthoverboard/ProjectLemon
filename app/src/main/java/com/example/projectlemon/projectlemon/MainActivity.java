@@ -1,13 +1,19 @@
 package com.example.projectlemon.projectlemon;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.os.AsyncTask;
 import android.preference.PreferenceActivity;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.github.kevinsawicki.http.HttpRequest;
 import com.loopj.android.http.*;
 import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
@@ -28,8 +34,16 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
 import java.math.BigInteger;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.ProtocolException;
+import java.net.URL;
 
 import cz.msebera.android.httpclient.Header;
 import cz.msebera.android.httpclient.entity.StringEntity;
@@ -68,6 +82,9 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void onSuccess(LoginResult loginResult) {
                         //query que manda a buscar al usuario
+
+                        new GetHttpRequest().execute();
+
 
                         final AccessToken accessToken = AccessToken.getCurrentAccessToken();
                         Log.d("e", accessToken.toString());
@@ -171,10 +188,31 @@ public class MainActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         callbackManager.onActivityResult(requestCode, resultCode, data);
+
     }
 
     public boolean isLoggedIn() {
         AccessToken accessToken = AccessToken.getCurrentAccessToken();
         return accessToken != null;
     }
+
+
+
+    private class GetHttpRequest extends AsyncTask<String, Void, String> {
+        @Override
+        protected String doInBackground(String... params) {
+            String response = HttpRequest.get("https://p4x0vleufi.execute-api.us-east-1.amazonaws.com/dev/searchUser/1178164815573359").body();
+            Log.d("HttpReq", response);
+            return response;
+
+        }
+
+        @Override
+        protected void onPostExecute(String result) {
+            Log.d("HttpReq", result);
+        }
+    }
+
 }
+
+
