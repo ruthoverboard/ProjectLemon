@@ -2,6 +2,7 @@ package com.example.projectlemon.projectlemon;
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
@@ -14,6 +15,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.github.kevinsawicki.http.HttpRequest;
 import com.loopj.android.http.*;
 import com.facebook.AccessToken;
 import com.facebook.GraphRequest;
@@ -43,9 +46,6 @@ public class askPhoneNumber extends AppCompatActivity {
         if(extras != null){
             career = extras.getString("career");
         }
-
-
-
 
         Button btnProfile = (Button) findViewById(R.id.btnContinuar);
         btnProfile.setOnClickListener(new View.OnClickListener(){
@@ -103,6 +103,9 @@ public class askPhoneNumber extends AppCompatActivity {
                                         }
                                         Log.d("num", phoneNumber);
 
+                                        new GetHttpRequest().execute(params);
+
+                                        /*
                                         AsyncHttpClient client = new AsyncHttpClient();
                                         client.post(getApplicationContext(), url, params, "application/json", new AsyncHttpResponseHandler() {
                                             @Override
@@ -124,6 +127,8 @@ public class askPhoneNumber extends AppCompatActivity {
                                             }
 
                                         });
+                                        */
+
 
 
                                     } catch (JSONException e) {
@@ -156,4 +161,48 @@ public class askPhoneNumber extends AppCompatActivity {
     }
 
 
+
+
+
+
+    private class GetHttpRequest extends AsyncTask<StringEntity, Object, Boolean> {
+        @Override
+        protected Boolean doInBackground(StringEntity... params) {
+            //JSONArray response = null;
+            Boolean bool = null;
+
+            String url = "https://p4x0vleufi.execute-api.us-east-1.amazonaws.com/dev/createUser";
+            HttpRequest.post(url).send(params[0].toString()).code();
+
+            //response = new JSONArray(HttpRequest.get(url).body());
+            //String idUserDB = response.getJSONObject(0).get("idUser").toString();
+            //Log.d("HttpSNAP", idUserDB);
+
+            //if (params[0].equals(idUserDB)) {
+            Log.d("wtf", params[0].toString());
+            //startActivity(new Intent(MainActivity.this, UserProfileActivity.class));
+            bool = true;
+            //} else {
+            //startActivity(new Intent(MainActivity.this, firstLogin.class));
+            //    bool = false;
+            //}
+
+
+            //Log.d("HttpReq", response.toString());
+            return bool;
+            //return response;
+
+        }
+
+        @Override
+        protected void onPostExecute(Boolean result) {
+            Log.d("HttpReq", result.toString());
+            if (result == true){
+                startActivity(new Intent(askPhoneNumber.this, UserProfileActivity.class));
+            }
+            else{
+                //startActivity(new Intent(askPhoneNumber.this, firstLogin.class));
+            }
+        }
+    }
 }

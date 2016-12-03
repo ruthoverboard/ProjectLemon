@@ -3,7 +3,6 @@ package com.example.projectlemon.projectlemon;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
@@ -13,8 +12,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
-import com.loopj.android.http.*;
-import com.amazonaws.regions.Regions;
+
+import com.github.kevinsawicki.http.HttpRequest;
 import com.facebook.AccessToken;
 import com.facebook.GraphRequest;
 import com.facebook.GraphResponse;
@@ -28,12 +27,8 @@ import com.loopj.android.http.JsonHttpResponseHandler;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.w3c.dom.Text;
 
-import java.io.BufferedInputStream;
 import java.io.InputStream;
-import java.net.URL;
-import java.net.URLConnection;
 
 import cz.msebera.android.httpclient.Header;
 
@@ -79,14 +74,17 @@ public class UserProfileActivity extends AppCompatActivity {
                             JSONObject object,
                             GraphResponse response) {
                         // Application code
-                        TextView txtName = (TextView) findViewById(R.id.txtName);
-                        TextView txtFriends = (TextView) findViewById(R.id.txtFriends);
                         //ProfilePictureView imgProfile = (ProfilePictureView)findViewById(R.id.img);
-                        final TextView txtCareer = (TextView)findViewById(R.id.txtCareer);
 
                         //if(career != null){
-                            //txtCareer.setText(career);
+                        //txtCareer.setText(career);
                         //}
+
+                        TextView txtName = (TextView) findViewById(R.id.txtName);
+                        TextView txtFriends = (TextView) findViewById(R.id.txtFriends);
+                        final TextView txtCareer = (TextView)findViewById(R.id.txtCareer);
+
+
                         try {
                             txtName.setText(object.getString("name"));
 
@@ -108,8 +106,13 @@ public class UserProfileActivity extends AppCompatActivity {
                             }
 
 
+                            new GetHttpRequest().execute(idUser);
+
                             String url = "https://p4x0vleufi.execute-api.us-east-1.amazonaws.com/dev/searchUser/" + idUser;
                             Log.d("url", url);
+
+
+                            /*
                             AsyncHttpClient client = new AsyncHttpClient();
                             client.get(url, new JsonHttpResponseHandler() {
                                 @Override
@@ -145,6 +148,7 @@ public class UserProfileActivity extends AppCompatActivity {
                                 }
                             });
 
+*/
 
 
                         } catch (JSONException e) {
@@ -218,6 +222,46 @@ public class UserProfileActivity extends AppCompatActivity {
             bmImage.setImageBitmap(result);
             bmImage.setAdjustViewBounds(true);
             bmImage.setScaleType(ImageView.ScaleType.FIT_CENTER);
+        }
+    }
+
+
+    private class GetHttpRequest extends AsyncTask<String, Object, JSONArray> {
+        @Override
+        protected JSONArray doInBackground(String... params) {
+            JSONArray response = null;
+            Boolean bool = null;
+
+            try {
+                String url = "https://p4x0vleufi.execute-api.us-east-1.amazonaws.com/dev/searchUser/" + params[0];
+
+                response = new JSONArray(HttpRequest.get(url).body());
+                String idUserDB = response.getJSONObject(0).get("idUser").toString();
+                Log.d("HttpSNAP", idUserDB);
+
+
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+
+            Log.d("HttpReq", response.toString());
+            return response;
+            //return response;
+
+        }
+
+        @Override
+        protected void onPostExecute(JSONArray result) {
+            Log.d("HttpReq", result.toString());
+            try {
+                final TextView txtCareer = (TextView)findViewById(R.id.txtCareer);
+                txtCareer.setText(result.getJSONObject(0).get("career").toString());
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+
         }
     }
 

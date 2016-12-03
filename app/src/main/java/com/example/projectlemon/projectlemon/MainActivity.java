@@ -1,20 +1,14 @@
 package com.example.projectlemon.projectlemon;
 
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
-import android.preference.PreferenceActivity;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.ImageView;
-import android.widget.TextView;
 
 import com.github.kevinsawicki.http.HttpRequest;
-import com.loopj.android.http.*;
 import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
@@ -22,31 +16,17 @@ import com.facebook.FacebookException;
 import com.facebook.FacebookSdk;
 import com.facebook.GraphRequest;
 import com.facebook.GraphResponse;
-import com.facebook.Profile;
 import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.JsonHttpResponseHandler;
-import com.loopj.android.http.RequestParams;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.UnsupportedEncodingException;
-import java.math.BigInteger;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.ProtocolException;
-import java.net.URL;
-
 import cz.msebera.android.httpclient.Header;
-import cz.msebera.android.httpclient.entity.StringEntity;
 //comeonnnnn
 
 public class MainActivity extends AppCompatActivity {
@@ -83,7 +63,6 @@ public class MainActivity extends AppCompatActivity {
                     public void onSuccess(LoginResult loginResult) {
                         //query que manda a buscar al usuario
 
-                        new GetHttpRequest().execute();
 
 
                         final AccessToken accessToken = AccessToken.getCurrentAccessToken();
@@ -99,16 +78,21 @@ public class MainActivity extends AppCompatActivity {
                                         String idUser = null;
                                         try {
                                             idUser = object.getString("id");
-                                            Log.d("request", idUser);
+                                            Log.d("FBID", idUser);
                                         } catch (JSONException e) {
                                             e.printStackTrace();
                                         }
-                                        Log.d("json:", object.toString());
+                                        Log.d("FBjson:", object.toString());
 
                                         String url = "https://p4x0vleufi.execute-api.us-east-1.amazonaws.com/dev/searchUser/" + idUser;
-                                        Log.d("url", url);
-                                        AsyncHttpClient client = new AsyncHttpClient();
-                                        final String finalIdUser = idUser;
+                                        //Log.d("url", url);
+                                        //AsyncHttpClient client = new AsyncHttpClient();
+                                        //final String finalIdUser = idUser;
+
+
+                                        new GetHttpRequest().execute(idUser);
+
+                                        /*
                                         client.get(url, new JsonHttpResponseHandler() {
                                             @Override
                                             public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
@@ -152,6 +136,7 @@ public class MainActivity extends AppCompatActivity {
                                                 startActivity(new Intent(MainActivity.this, firstLogin.class));
                                             }
                                         });
+                                        */
                                     }
                                 });
                         Bundle parameters = new Bundle();
@@ -197,21 +182,59 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-
-    private class GetHttpRequest extends AsyncTask<String, Void, String> {
+    private class GetHttpRequest extends AsyncTask<String, Object, Boolean> {
         @Override
-        protected String doInBackground(String... params) {
-            String response = HttpRequest.get("https://p4x0vleufi.execute-api.us-east-1.amazonaws.com/dev/searchUser/1178164815573359").body();
-            Log.d("HttpReq", response);
-            return response;
+        protected Boolean doInBackground(String... params) {
+            JSONArray response = null;
+            Boolean bool = null;
+
+            try {
+                String url = "https://p4x0vleufi.execute-api.us-east-1.amazonaws.com/dev/searchUser/" + params[0];
+
+                response = new JSONArray(HttpRequest.get(url).body());
+
+                if(response != null && response.length() > 0 ){
+
+                    String idUserDB = response.getJSONObject(0).get("idUser").toString();
+                    Log.d("HttpSNAP", idUserDB);
+
+                    if (params[0].equals(idUserDB)) {
+                        Log.d("wtf", params[0]);
+                        //startActivity(new Intent(MainActivity.this, UserProfileActivity.class));
+                        bool = true;
+                    } else {
+                        //startActivity(new Intent(MainActivity.this, firstLogin.class));
+                        bool = false;
+                    }
+                }
+                else{
+                    bool = false;
+                }
+
+
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+
+            //Log.d("HttpReq", response.toString());
+            return bool;
+            //return response;
 
         }
 
         @Override
-        protected void onPostExecute(String result) {
-            Log.d("HttpReq", result);
+        protected void onPostExecute(Boolean result) {
+            //Log.d("HttpReq", result.toString());
+            if (result == true){
+                startActivity(new Intent(MainActivity.this, UserProfileActivity.class));
+            }
+            else{
+                startActivity(new Intent(MainActivity.this, firstLogin.class));
+            }
         }
     }
+
 
 }
 
