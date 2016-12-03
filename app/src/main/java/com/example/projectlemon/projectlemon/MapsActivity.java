@@ -75,7 +75,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     int count = 1;
     String query;
     boolean tripActive = false;
-
+    GroundOverlay driverIcon;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -132,7 +132,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             Toast.makeText(this, ex.toString(), Toast.LENGTH_LONG).show();
         }
         GroundOverlayOptions driveOptions = new GroundOverlayOptions()
-                .image(BitmapDescriptorFactory.fromResource(R.drawable.com_facebook_button_icon_blue))
+                .image(BitmapDescriptorFactory.fromResource(R.mipmap.car_driver))
                 .position(new LatLng(myLocation.getLatitude(), myLocation.getLongitude()),30f,20f);
         GroundOverlay driverIcon = googleMap.addGroundOverlay(driveOptions);
 
@@ -145,6 +145,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         //latSend = location.getLatitude();
         //longSend = location.getLongitude();
 
+        if(driverIcon != null) {
+            driverIcon.setPosition(new LatLng(location.getLatitude(), location.getLongitude()));
+        }
         try{
             if(Math.abs(Math.abs(location.getLatitude()) - Math.abs(lastKnownLocation.getLatitude())) >= .001 ||
                     Math.abs(Math.abs(location.getLongitude()) - Math.abs(lastKnownLocation.getLongitude())) >= .001)
@@ -238,6 +241,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         count++;
         Toast.makeText(this, "It WORKS!", Toast.LENGTH_LONG).show();
     }
+
 
 
 
