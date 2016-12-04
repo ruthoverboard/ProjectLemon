@@ -166,11 +166,6 @@ public class askPhoneNumber extends AppCompatActivity {
         });
     }
 
-
-
-
-
-
     private class GetHttpRequest extends AsyncTask<String, Object, Boolean> {
         @Override
         protected Boolean doInBackground(String... params) {

@@ -13,6 +13,12 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.facebook.AccessTokenTracker;
+import com.facebook.CallbackManager;
+import com.facebook.FacebookCallback;
+import com.facebook.FacebookException;
+import com.facebook.login.LoginManager;
+import com.facebook.login.LoginResult;
 import com.github.kevinsawicki.http.HttpRequest;
 import com.facebook.AccessToken;
 import com.facebook.GraphRequest;
@@ -37,6 +43,7 @@ public class UserProfileActivity extends AppCompatActivity {
 
     String career;
     String[] data;
+    public CallbackManager callbackManager;
 
     @Override
     public void onBackPressed() {
@@ -47,6 +54,8 @@ public class UserProfileActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.user_profile);
 
+
+        callbackManager = CallbackManager.Factory.create();
         //Bundle extras = getIntent().getExtras();
 
 
@@ -54,15 +63,41 @@ public class UserProfileActivity extends AppCompatActivity {
             //career = extras.getString("career");
         //}
 
-
+        /*
+        callbackManager = CallbackManager.Factory.create();
         LoginButton loginButton = (LoginButton) findViewById(R.id.login_button);
-        loginButton.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                startActivity(new Intent(UserProfileActivity.this, MainActivity.class));
+        LoginManager.getInstance().registerCallback(callbackManager,
+                new FacebookCallback<LoginResult>() {
+                    @Override
+                    public void onSuccess(LoginResult loginResult) {
+                        //query que manda a buscar al usuario
+                    }
+
+                    @Override
+                    public void onCancel() {
+                        // App code
+                    }
+
+                    @Override
+                    public void onError(FacebookException exception) {
+                        // App code
+                    }
+                });
+*/
+
+        AccessTokenTracker accessTokenTracker = new AccessTokenTracker() {
+            @Override
+            protected void onCurrentAccessTokenChanged(AccessToken oldAccessToken,
+                                                       AccessToken currentAccessToken) {
+                if (currentAccessToken == null) {
+                    //write your code here what to do when user logout
+                    //accessTokenTracker.stopTracking();
+                    startActivity(new Intent(UserProfileActivity.this, MainActivity.class));
+                }
             }
-        });
+        };
 
-
+        accessTokenTracker.startTracking();;
 
         AccessToken accessToken = AccessToken.getCurrentAccessToken();
 
@@ -82,7 +117,7 @@ public class UserProfileActivity extends AppCompatActivity {
 
                         TextView txtName = (TextView) findViewById(R.id.txtName);
                         TextView txtFriends = (TextView) findViewById(R.id.txtFriends);
-                        final TextView txtCareer = (TextView)findViewById(R.id.txtCareer);
+                        //final TextView txtCareer = (TextView)findViewById(R.id.txtCareer);
 
 
                         try {
@@ -193,8 +228,14 @@ public class UserProfileActivity extends AppCompatActivity {
 
     }
 
+/*
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        callbackManager.onActivityResult(requestCode, resultCode, data);
 
-
+    }
+*/
 
     //new DownloadImageTask((ImageView) findViewById(R.id.imgProfile)).execute(picture.getString("url"));
     private class DownloadImageTask extends AsyncTask<String, Void, Bitmap> {
