@@ -162,10 +162,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         }catch (Exception ex){
             Toast.makeText(this, ex.toString(), Toast.LENGTH_LONG).show();
         }
-        GroundOverlayOptions driveOptions = new GroundOverlayOptions()
-                .image(BitmapDescriptorFactory.fromResource(R.mipmap.car_driver))
-                .position(new LatLng(myLocation.getLatitude(), myLocation.getLongitude()),30f,20f);
-        GroundOverlay driverIcon = googleMap.addGroundOverlay(driveOptions);
+
 
     }
 
@@ -184,13 +181,13 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 if(Math.abs(Math.abs(location.getLatitude()) - Math.abs(lastKnownLocation.getLatitude())) >= .001 ||
                         Math.abs(Math.abs(location.getLongitude()) - Math.abs(lastKnownLocation.getLongitude())) >= .001)
                 {
-                    /*query = idTrip+","+count+","+lastKnownLocation.getLongitude()+","+lastKnownLocation.getLatitude();
+                    query = idTrip+","+count+","+lastKnownLocation.getLongitude()+","+lastKnownLocation.getLatitude();
                     awsHelper.rec.saveRecord(query, "ProjectLemonStream");
                     awsHelper.rec.submitAllRecords();
                     awsHelper.rec.deleteAllRecords();
                     count++;
                     lastKnownLocation = location;
-                */}
+                }
             }catch (Exception ex){
                 Toast.makeText(this, ex.toString(), Toast.LENGTH_LONG).show();
 
@@ -257,23 +254,24 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         r.myLatLng = myLatLng;
         r.latLngCetys = latLngCetys;
         //r.execute();
-        */
+
         query = idTrip+","+count+","+lastKnownLocation.getLongitude()+","+lastKnownLocation.getLatitude()+","+ awsHelper.key;
         awsHelper.rec.saveRecord(query, "ProjectLemonStream");
         awsHelper.rec.submitAllRecords();
         awsHelper.rec.deleteAllRecords();
         count++;
-        Toast.makeText(this, "It WORKS!", Toast.LENGTH_LONG).show();
+        */Toast.makeText(this, "It WORKS!", Toast.LENGTH_LONG).show();
     }
 
     @Override
     public void onInfoWindowClick(Marker marker) {
 
+        tripActive = true;
         Toast.makeText(this, marker.getTitle(),
                 Toast.LENGTH_SHORT).show();
 
         String params = "{ "
-                + ", \"nameUser\": " + "\"" + Username + "\""
+                + "\"nameUser\": " + "\"" + Username + "\""
                 + ", \"idFirebase\": " + "\"" + marker.getSnippet() + "\""
                 +  " }";
 
@@ -437,7 +435,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 jo.put("email", "John");
 */
                 Log.d("My App", obj.toString());
-                Log.d("phonetype value ", obj.getString("career"));
 
                 StringBuilder sb = new StringBuilder();
                 HttpURLConnection urlConnection=null;
