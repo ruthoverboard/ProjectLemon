@@ -88,6 +88,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         }
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
 
+        getPermissions();
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
@@ -118,7 +119,15 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
-        getPermissions();
+        if (ContextCompat.checkSelfPermission(this,
+                Manifest.permission.ACCESS_FINE_LOCATION)
+                == PackageManager.PERMISSION_GRANTED) {
+            mMap.setMyLocationEnabled(true);
+        }else {
+
+            // Permission denied, Disable the functionality that depends on this permission.
+            Toast.makeText(this, "permission denied", Toast.LENGTH_LONG).show();
+        }
         try {
             LocationManager locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
             locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, this);
@@ -148,20 +157,22 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         if(driverIcon != null) {
             driverIcon.setPosition(new LatLng(location.getLatitude(), location.getLongitude()));
         }
-        try{
-            if(Math.abs(Math.abs(location.getLatitude()) - Math.abs(lastKnownLocation.getLatitude())) >= .001 ||
-                    Math.abs(Math.abs(location.getLongitude()) - Math.abs(lastKnownLocation.getLongitude())) >= .001)
-            {
-                query = idTrip+","+count+","+lastKnownLocation.getLongitude()+","+lastKnownLocation.getLatitude();
-                awsHelper.rec.saveRecord(query, "ProjectLemonStream");
-                awsHelper.rec.submitAllRecords();
-                awsHelper.rec.deleteAllRecords();
-                count++;
-                lastKnownLocation = location;
-            }
-        }catch (Exception ex){
-            Toast.makeText(this, ex.toString(), Toast.LENGTH_LONG).show();
+        if(tripActive){
+            try{
+                if(Math.abs(Math.abs(location.getLatitude()) - Math.abs(lastKnownLocation.getLatitude())) >= .001 ||
+                        Math.abs(Math.abs(location.getLongitude()) - Math.abs(lastKnownLocation.getLongitude())) >= .001)
+                {
+                    /*query = idTrip+","+count+","+lastKnownLocation.getLongitude()+","+lastKnownLocation.getLatitude();
+                    awsHelper.rec.saveRecord(query, "ProjectLemonStream");
+                    awsHelper.rec.submitAllRecords();
+                    awsHelper.rec.deleteAllRecords();
+                    count++;
+                    lastKnownLocation = location;
+                */}
+            }catch (Exception ex){
+                Toast.makeText(this, ex.toString(), Toast.LENGTH_LONG).show();
 
+            }
         }
 
     }
@@ -212,16 +223,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             per = true;
         }
         // Permission was granted.
-        if (ContextCompat.checkSelfPermission(this,
-                Manifest.permission.ACCESS_FINE_LOCATION)
-                == PackageManager.PERMISSION_GRANTED) {
 
-            mMap.setMyLocationEnabled(true);
-        }else {
-
-            // Permission denied, Disable the functionality that depends on this permission.
-            Toast.makeText(this, "permission denied", Toast.LENGTH_LONG).show();
-        }
     }
 
     private void getRoute(){/*
