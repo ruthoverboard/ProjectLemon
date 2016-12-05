@@ -8,9 +8,6 @@ import com.amazonaws.auth.CognitoCachingCredentialsProvider;
 import com.amazonaws.auth.CognitoCredentialsProvider;
 import com.amazonaws.mobileconnectors.kinesis.kinesisrecorder.KinesisRecorder;
 import com.amazonaws.regions.Regions;
-import com.amazonaws.services.dynamodbv2.AmazonDynamoDBClient;
-import com.amazonaws.mobileconnectors.dynamodbv2.dynamodbmapper.*;
-import com.amazonaws.mobileconnectors.lambdainvoker.*;
 import com.google.firebase.iid.FirebaseInstanceId;
 
 
@@ -23,8 +20,8 @@ public class AWSHelper {
     private static AWSHelper aws;
     public static CognitoCredentialsProvider credentialsProvider;
     public static KinesisRecorder rec;
-    public static Location driver;
-    public static String key = FirebaseInstanceId.getInstance().getToken();
+    public Location driver;
+    public static String key;
 
     private AWSHelper(){
         credentialsProvider = new CognitoCachingCredentialsProvider(
@@ -32,6 +29,7 @@ public class AWSHelper {
                 "us-east-1:a0c3cc8d-5bb5-4c28-b4b7-9282805a37d3", // Identity Pool ID
                 Regions.US_EAST_1 // Region
         );
+        key = FirebaseInstanceId.getInstance().getToken();
         String path = "CetysCarpool";
         File dir = getApplicationContext().getDir(path, 0);
         dir.delete();
