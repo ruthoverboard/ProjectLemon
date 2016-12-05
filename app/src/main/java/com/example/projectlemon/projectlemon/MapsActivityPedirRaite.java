@@ -268,9 +268,7 @@ public class MapsActivityPedirRaite extends FragmentActivity implements OnMapRea
                             }
                             br.close();
 
-                            Log.d("woah", "" + sb.toString());
                         }else{
-                            Log.d("woah", urlConnection.getResponseMessage());
 
                         }
 
@@ -283,7 +281,6 @@ public class MapsActivityPedirRaite extends FragmentActivity implements OnMapRea
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
-                    Log.d("wtf", params[0].toString());
                     bool = true;
                     return bool;
 

@@ -76,7 +76,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         final Button button = (Button) findViewById(R.id.btnRoute);
         button.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                getRoute();
+                //getRoute();
                 new GetHttpRequest().execute();
             }
         });
@@ -275,8 +275,13 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             for(int i = 0; i < result.length(); i++){
 
                 try {
-                        String a = result.getJSONObject(0).get("orderNumber").toString();
-                        Log.d("sss", a);
+                    String a = result.getJSONObject(0).get("orderNumber").toString();
+                    double lat = Double.parseDouble(result.getJSONObject(i).get("latitudeQueue").toString());
+                    double lng = Double.parseDouble(result.getJSONObject(i).get("longitudeQueue").toString());
+                    mMap.addMarker(new MarkerOptions()
+                            .position(new LatLng(lat,lng))
+                            .title(result.getJSONObject(i).get("name").toString()));
+
 
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -284,9 +289,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             }
 
 
-            mMap.addMarker(new MarkerOptions()
-                    .position(new LatLng(myLocation.getLatitude(),myLocation.getLongitude()))
-                    .title("Marker Yay"));
+
 
         }
     }
