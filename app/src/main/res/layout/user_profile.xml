@@ -73,7 +73,7 @@
         android:layout_alignStart="@+id/fb_share_btn" />
 
     <TextView
-        android:text="Career"
+        android:text=""
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/txtCareer"
