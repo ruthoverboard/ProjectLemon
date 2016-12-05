@@ -113,14 +113,11 @@ public class MapsActivityPedirRaite extends FragmentActivity implements OnMapRea
                                             + ", \"idFirebase\": " + "\"" + FirebaseInstanceId.getInstance().getToken() + "\""
                                             +  " }";
 
-                                    Log.d("json:", params);
                                     new GetHttpRequest().execute(params);
 
                                 } catch (JSONException e) {
 
                                 }
-                                Log.d("json:", object.toString());
-
                             }
                         });
 
@@ -313,7 +310,6 @@ public class MapsActivityPedirRaite extends FragmentActivity implements OnMapRea
                     if (result == true){
                     }
                     else{
-                        //startActivity(new Intent(askPhoneNumber.this, firstLogin.class));
                     }
                 }
             }
