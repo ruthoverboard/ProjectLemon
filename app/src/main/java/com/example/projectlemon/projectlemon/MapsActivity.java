@@ -48,6 +48,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
+import java.math.BigInteger;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.ProtocolException;
@@ -74,6 +75,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     boolean tripActive = false;
     GroundOverlay driverIcon;
     String Username = "";
+    BigInteger UserId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -120,6 +122,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                         // Application code
                         try {
                             Username = object.getString("name");
+                            UserId = new BigInteger(object.getString("id"));
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
@@ -127,7 +130,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     }
                 });
         Bundle parameters = new Bundle();
-        parameters.putString("fields", "name");
+        parameters.putString("fields", "name,id");
         request.setParameters(parameters);
         request.executeAsync();
 
@@ -277,9 +280,150 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
         new PostRequest().execute(params);
 
+        String params2 = "{ "
+                + "\"idUser\": " + UserId
+                + ", \"startLon\": " + lastKnownLocation.getLongitude()
+                + ", \"startLat\": " + lastKnownLocation.getLatitude()
+                +  " }";
+
+        new PostCreateTrip().execute(params2);
+
+        String params3 = "{ "
+                + "\"id\": " + "\"" + marker.getSnippet() + "\""
+                +  " }";
+
+        new PostRemoveQueue().execute(params3);
+
+
+
 
     }
 
+    private class PostRemoveQueue extends AsyncTask<String, Object, Boolean> {
+        @Override
+        protected Boolean doInBackground(String... params) {
+            Boolean bool = null;
+            JSONObject obj = null;
+            String url = "https://p4x0vleufi.execute-api.us-east-1.amazonaws.com/dev/deleteRiders";
+            try {
+                obj = new JSONObject(params[0]);
+
+                Log.d("My App", obj.toString());
+
+                StringBuilder sb = new StringBuilder();
+                HttpURLConnection urlConnection=null;
+                URL url2 = new URL(url);
+                urlConnection = (HttpURLConnection) url2.openConnection();
+                urlConnection.setDoOutput(true);
+                urlConnection.setRequestMethod("POST");
+                urlConnection.setUseCaches(false);
+                urlConnection.setConnectTimeout(10000);
+                urlConnection.setReadTimeout(10000);
+                urlConnection.setRequestProperty("Content-Type","application/json");
+                urlConnection.connect();
+
+                OutputStreamWriter out = new OutputStreamWriter(urlConnection.getOutputStream());
+                out.write(obj.toString());
+                out.close();
+
+                int HttpResult =urlConnection.getResponseCode();
+                if(HttpResult ==HttpURLConnection.HTTP_OK){
+                    BufferedReader br = new BufferedReader(new InputStreamReader(
+                            urlConnection.getInputStream(),"utf-8"));
+                    String line = null;
+                    while ((line = br.readLine()) != null) {
+                        sb.append(line + "\n");
+                    }
+                    br.close();
+
+                    Log.d("woah", ""+sb.toString());
+                }else{
+                    Log.d("woah", urlConnection.getResponseMessage());
+
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+            } catch (MalformedURLException e) {
+                e.printStackTrace();
+            } catch (ProtocolException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            Log.d("wtf", params[0].toString());
+            bool = true;
+            return bool;
+
+        }
+
+        @Override
+        protected void onPostExecute(Boolean result) {
+
+        }
+    }
+
+    private class PostCreateTrip extends AsyncTask<String, Object, Boolean> {
+        @Override
+        protected Boolean doInBackground(String... params) {
+            Boolean bool = null;
+            JSONObject obj = null;
+            String url = "https://p4x0vleufi.execute-api.us-east-1.amazonaws.com/dev/createTrip";
+            try {
+                obj = new JSONObject(params[0]);
+
+                Log.d("My App", obj.toString());
+
+                StringBuilder sb = new StringBuilder();
+                HttpURLConnection urlConnection=null;
+                URL url2 = new URL(url);
+                urlConnection = (HttpURLConnection) url2.openConnection();
+                urlConnection.setDoOutput(true);
+                urlConnection.setRequestMethod("POST");
+                urlConnection.setUseCaches(false);
+                urlConnection.setConnectTimeout(10000);
+                urlConnection.setReadTimeout(10000);
+                urlConnection.setRequestProperty("Content-Type","application/json");
+                urlConnection.connect();
+
+                OutputStreamWriter out = new OutputStreamWriter(urlConnection.getOutputStream());
+                out.write(obj.toString());
+                out.close();
+
+                int HttpResult =urlConnection.getResponseCode();
+                if(HttpResult ==HttpURLConnection.HTTP_OK){
+                    BufferedReader br = new BufferedReader(new InputStreamReader(
+                            urlConnection.getInputStream(),"utf-8"));
+                    String line = null;
+                    while ((line = br.readLine()) != null) {
+                        sb.append(line + "\n");
+                    }
+                    br.close();
+
+                    Log.d("woah", ""+sb.toString());
+                }else{
+                    Log.d("woah", urlConnection.getResponseMessage());
+
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+            } catch (MalformedURLException e) {
+                e.printStackTrace();
+            } catch (ProtocolException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            Log.d("wtf", params[0].toString());
+            bool = true;
+            return bool;
+
+        }
+
+        @Override
+        protected void onPostExecute(Boolean result) {
+
+        }
+    }
 
     private class GetHttpRequest extends AsyncTask<String, Object, JSONArray> {
         @Override
