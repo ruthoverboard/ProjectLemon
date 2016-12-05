@@ -86,7 +86,7 @@ public class MapsActivityPedirRaite extends FragmentActivity implements OnMapRea
 
 
         Button pedirRte = (Button) findViewById(R.id.btnRaite);
-        buttonHme.setOnClickListener(new View.OnClickListener() {
+        pedirRte.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
 
                 AccessToken accessToken = AccessToken.getCurrentAccessToken();
@@ -190,32 +190,26 @@ public class MapsActivityPedirRaite extends FragmentActivity implements OnMapRea
             public void onLocationChanged(Location location) {
 
             }
-
             @Override
             public void onStatusChanged(String provider, int status, Bundle extras) {
 
             }
-
             @Override
             public void onProviderEnabled(String provider) {
 
             }
-
             @Override
             public void onProviderDisabled(String provider) {
 
             }
-
             @Override
             public void onConnected(@Nullable Bundle bundle) {
 
             }
-
             @Override
             public void onConnectionSuspended(int i) {
 
             }
-
             @Override
             public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
 
@@ -230,10 +224,6 @@ public class MapsActivityPedirRaite extends FragmentActivity implements OnMapRea
                 m.setText("My Awesome Text");
                 ProfilePictureView p = (ProfilePictureView) view.findViewById(R.id.img);
                 p.setProfileId("10206931439515838");
-                //ProfilePictureView profilePictureView;
-                //profilePictureView = (ProfilePictureView) view.findViewById(R.id.img);
-                //profilePictureView.setProfileId("1123555264402222");
-
                 return view;
             }
 

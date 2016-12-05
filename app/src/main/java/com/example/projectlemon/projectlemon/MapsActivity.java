@@ -3,27 +3,24 @@ package com.example.projectlemon.projectlemon;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.AsyncTask;
-import android.os.Environment;
 import android.os.StrictMode;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
-import android.support.v4.app.NotificationCompat;
 import android.support.v4.content.ContextCompat;
 import android.Manifest;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.TextView;
 import android.widget.Toast;
 
-import com.facebook.AccessToken;
+import com.github.kevinsawicki.http.HttpRequest;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 //import com.google.android.gms.common.internal.GetServiceRequest;
@@ -31,7 +28,6 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
-import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.GroundOverlay;
 import com.google.android.gms.maps.model.GroundOverlayOptions;
@@ -41,24 +37,9 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.json.JSONTokener;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.URL;
-import com.amazonaws.mobileconnectors.kinesis.kinesisrecorder.*;
-import com.amazonaws.auth.CognitoCachingCredentialsProvider;
-import com.amazonaws.regions.Regions;
-import com.amazonaws.services.dynamodbv2.*;
 //import com.amazonaws.mobileconnectors.dynamodbv2.dynamodbmapper.*;
-import java.security.Provider;
-import com.google.firebase.messaging.FirebaseMessagingService;
-import com.google.firebase.messaging.FirebaseMessaging;
 
-import static com.facebook.FacebookSdk.getApplicationContext;
 
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback, GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener,
@@ -95,6 +76,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         button.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 getRoute();
+                new GetHttpRequest().execute();
             }
         });
 
@@ -243,6 +225,69 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     }
 
 
+    private class GetHttpRequest extends AsyncTask<String, Object, JSONArray> {
+        @Override
+        protected JSONArray doInBackground(String... params) {
+            JSONArray response = null;
+            Boolean bool = null;
+
+            try {
+                String url = "https://p4x0vleufi.execute-api.us-east-1.amazonaws.com/dev/searchRider/" + 1;
+
+                response = new JSONArray(HttpRequest.get(url).body());
+
+                if(response != null && response.length() > 0 ){
+
+                    //String idUserDB = response.getJSONObject(0).get("idUser").toString();
+                    Log.d("HttpSNAP", response.toString());
+
+                    //if (params[0].equals(idUserDB)) {
+                        //Log.d("wtf", params[0]);
+                        //startActivity(new Intent(MainActivity.this, UserProfileActivity.class));
+                        //bool = true;
+                    //} else {
+                        //startActivity(new Intent(MainActivity.this, firstLogin.class));
+                       // bool = false;
+                   // }
+                }
+                else{
+                    bool = false;
+                }
+
+
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+
+            //Log.d("HttpReq", response.toString());
+            return response;
+            //return response;
+
+        }
+
+        @Override
+        protected void onPostExecute(JSONArray result) {
+            //Log.d("HttpReq", result.toString());
+
+            for(int i = 0; i < result.length(); i++){
+
+                try {
+                        String a = result.getJSONObject(0).get("orderNumber").toString();
+                        Log.d("sss", a);
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+
+
+            mMap.addMarker(new MarkerOptions()
+                    .position(new LatLng(myLocation.getLatitude(),myLocation.getLongitude()))
+                    .title("Marker Yay"));
+
+        }
+    }
 
 
 
