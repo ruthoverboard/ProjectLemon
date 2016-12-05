@@ -63,7 +63,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
 
     private GoogleMap mMap;
-    private Location myLocation;
     LatLng latLngCetys = new LatLng(32.50660123141241, -116.92439664155245);
     static AWSHelper awsHelper = AWSHelper.getInstance();
     Double latSend, longSend;
@@ -153,10 +152,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         try {
             LocationManager locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
             locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, this);
-            myLocation = locationManager.getLastKnownLocation(locationManager.GPS_PROVIDER);
-            lastKnownLocation = myLocation;
-            awsHelper.driver = myLocation;
-            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(myLocation.getLatitude(),myLocation.getLongitude()), 17));
+            lastKnownLocation = locationManager.getLastKnownLocation(locationManager.GPS_PROVIDER);
+            awsHelper.driver = lastKnownLocation;
+            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(lastKnownLocation.getLatitude(),lastKnownLocation.getLongitude()), 17));
         }catch (SecurityException ex){
             Toast.makeText(this, ex.toString(), Toast.LENGTH_LONG).show();
         }catch (Exception ex){
@@ -181,10 +179,12 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 if(Math.abs(Math.abs(location.getLatitude()) - Math.abs(lastKnownLocation.getLatitude())) >= .001 ||
                         Math.abs(Math.abs(location.getLongitude()) - Math.abs(lastKnownLocation.getLongitude())) >= .001)
                 {
-                    query = idTrip+","+count+","+lastKnownLocation.getLongitude()+","+lastKnownLocation.getLatitude();
-                    awsHelper.rec.saveRecord(query, "ProjectLemonStream");
+                    query = idTrip+","+count+","+lastKnownLocation.getLongitude()+","+lastKnownLocation.getLatitude()+","+ awsHelper.key;;
+                    awsHelper.rec.saveRecord(query, "KinesisCarpool");
                     awsHelper.rec.submitAllRecords();
                     awsHelper.rec.deleteAllRecords();
+                    awsHelper.driver.setLongitude(location.getLongitude());
+                    awsHelper.driver.setLatitude(location.getLatitude());
                     count++;
                     lastKnownLocation = location;
                 }
@@ -267,6 +267,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     public void onInfoWindowClick(Marker marker) {
 
         tripActive = true;
+        awsHelper.key = marker.getSnippet();
         Toast.makeText(this, marker.getTitle(),
                 Toast.LENGTH_SHORT).show();
 

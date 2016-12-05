@@ -66,10 +66,12 @@ public class MapsActivityPedirRaite extends FragmentActivity implements OnMapRea
         , GoogleMap.InfoWindowAdapter
         {
 
+    public AWSHelper awsHelper = AWSHelper.getInstance();
     private GoogleMap mMap;
-    private Location myLocation;
     Location lastKnownLocation;
     String idUser;
+            boolean first = true;
+            GroundOverlay driverIcon;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -87,8 +89,6 @@ public class MapsActivityPedirRaite extends FragmentActivity implements OnMapRea
                 startActivity(new Intent(MapsActivityPedirRaite.this, UserProfileActivity.class));
             }
         });
-
-        AWSHelper awsHelper = AWSHelper.getInstance();
         Button pedirRte = (Button) findViewById(R.id.btnRaite);
         pedirRte.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
@@ -139,20 +139,17 @@ public class MapsActivityPedirRaite extends FragmentActivity implements OnMapRea
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
         getPermissions();
+
         LocationManager locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
         try {
             locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, this);
-            myLocation = locationManager.getLastKnownLocation(locationManager.GPS_PROVIDER);
-            lastKnownLocation = myLocation;
-            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(myLocation.getLatitude(),myLocation.getLongitude()), 17));
+            lastKnownLocation = locationManager.getLastKnownLocation(locationManager.GPS_PROVIDER);
+            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(lastKnownLocation.getLatitude(),lastKnownLocation.getLongitude()), 17));
         }catch (SecurityException ex){
             Toast.makeText(this, ex.toString(), Toast.LENGTH_LONG).show();
         }
 
-        GroundOverlayOptions driveOptions = new GroundOverlayOptions()
-                .image(BitmapDescriptorFactory.fromResource(R.mipmap.car_driver))
-                .position(new LatLng(myLocation.getLatitude(), myLocation.getLongitude()),30f,20f);
-        GroundOverlay driverIcon = googleMap.addGroundOverlay(driveOptions);
+
 
         mMap.setInfoWindowAdapter(this);
 
@@ -193,7 +190,22 @@ public class MapsActivityPedirRaite extends FragmentActivity implements OnMapRea
 
             @Override
             public void onLocationChanged(Location location) {
+                    if(awsHelper.driver != null){
+                        if(first) {
+                            GroundOverlayOptions driveOptions = new GroundOverlayOptions()
+                                    .image(BitmapDescriptorFactory.fromResource(R.mipmap.car_driver))
+                                    .position(new LatLng(awsHelper.driver.getLatitude(), awsHelper.driver.getLongitude()),30f,20f);
+                            driverIcon = mMap.addGroundOverlay(driveOptions);
+                            first = false;
+                        }
+                        if(Math.abs(Math.abs(location.getLatitude()) - Math.abs(awsHelper.driver.getLatitude())) >= .001 ||
+                                Math.abs(Math.abs(location.getLongitude()) - Math.abs(awsHelper.driver.getLongitude())) >= .001)
+                        {
+                            driverIcon.setPosition(new LatLng(awsHelper.driver.getLatitude(),awsHelper.driver.getLongitude()));
+                        }
+                    }
 
+                lastKnownLocation = location;
             }
             @Override
             public void onStatusChanged(String provider, int status, Bundle extras) {
