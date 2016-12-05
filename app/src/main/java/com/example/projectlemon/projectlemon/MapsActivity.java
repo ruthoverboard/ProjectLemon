@@ -252,7 +252,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         String url = "https://maps.googleapis.com/maps/api/directions/json?origin="
                 + myLatLng.latitude + "," + myLatLng.longitude +
                 "&destination=" + latLngCetys.latitude + "," + latLngCetys.longitude +
-                "&key=AIzaSyCq7XqwYUeGOVLqs4FzvjDrYYRGLEar3-A";
+            "&key=AIzaSyCq7XqwYUeGOVLqs4FzvjDrYYRGLEar3-A";
         RetrieveFeedTask r = new RetrieveFeedTask();
         r.myLatLng = myLatLng;
         r.latLngCetys = latLngCetys;
@@ -363,17 +363,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
                 if(response != null && response.length() > 0 ){
 
-                    //String idUserDB = response.getJSONObject(0).get("idUser").toString();
                     Log.d("RouteTrip", response.toString());
 
-                    //if (params[0].equals(idUserDB)) {
-                    //Log.d("wtf", params[0]);
-                    //startActivity(new Intent(MainActivity.this, UserProfileActivity.class));
-                    //bool = true;
-                    //} else {
-                    //startActivity(new Intent(MainActivity.this, firstLogin.class));
-                    // bool = false;
-                    // }
                 }
                 else{
                     bool = false;
@@ -385,9 +376,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             }
 
 
-            //Log.d("HttpReq", response.toString());
             return response;
-            //return response;
 
         }
 
@@ -427,17 +416,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             try {
                 obj = new JSONObject(params[0]);
 
-/*
-                //for testing
-                JSONObject jo = new JSONObject();
-                jo.put("id", 120678);
-                jo.put("name", "Doe");
-                jo.put("phoneNumber", "John");
-                jo.put("career", "Doesss");
-                jo.put("email", "John");
-*/
                 Log.d("My App", obj.toString());
-                Log.d("phonetype value ", obj.getString("career"));
 
                 StringBuilder sb = new StringBuilder();
                 HttpURLConnection urlConnection=null;
@@ -470,19 +449,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     Log.d("woah", urlConnection.getResponseMessage());
 
                 }
-
-
-                /*
-                Webb webb = Webb.create();
-                webb.setDefaultHeader("Connection", "close");
-                JSONObject result = webb.post(url)
-                        .body(jo)
-                        .ensureSuccess()
-                        .asJsonObject()
-                        .getBody();
-
-                Log.d("WORKS", result.toString());
-                */
             } catch (JSONException e) {
                 e.printStackTrace();
             } catch (MalformedURLException e) {
@@ -495,24 +461,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             Log.d("wtf", params[0].toString());
             bool = true;
             return bool;
-
-            //HttpRequest.post(url).send(params[0].toString()).code();
-            //response = new JSONArray(HttpRequest.get(url).body());
-            //String idUserDB = response.getJSONObject(0).get("idUser").toString();
-            //Log.d("HttpSNAP", idUserDB);
-            //if (params[0].equals(idUserDB)) {
-
-            //startActivity(new Intent(MainActivity.this, UserProfileActivity.class));
-
-            //} else {
-            //startActivity(new Intent(MainActivity.this, firstLogin.class));
-            //    bool = false;
-            //}
-
-
-            //Log.d("HttpReq", response.toString());
-
-            //return response;
 
         }
 
