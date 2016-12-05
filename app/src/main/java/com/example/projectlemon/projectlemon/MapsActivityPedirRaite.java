@@ -18,6 +18,7 @@ import android.os.Bundle;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.content.ContextCompat;
 import android.Manifest;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
@@ -25,7 +26,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.facebook.AccessToken;
+import com.facebook.GraphRequest;
+import com.facebook.GraphResponse;
 import com.facebook.login.widget.ProfilePictureView;
+import com.github.kevinsawicki.http.HttpRequest;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 //import com.google.android.gms.common.internal.GetServiceRequest;
@@ -36,6 +40,20 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.firebase.iid.FirebaseInstanceId;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.ProtocolException;
+import java.net.URL;
 
 
 public class MapsActivityPedirRaite extends FragmentActivity implements OnMapReadyCallback, GoogleApiClient.ConnectionCallbacks,
@@ -47,6 +65,7 @@ public class MapsActivityPedirRaite extends FragmentActivity implements OnMapRea
     private GoogleMap mMap;
     private Location myLocation;
     Location lastKnownLocation;
+    String idUser;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,6 +81,50 @@ public class MapsActivityPedirRaite extends FragmentActivity implements OnMapRea
             public void onClick(View v) {
 
                 startActivity(new Intent(MapsActivityPedirRaite.this, UserProfileActivity.class));
+            }
+        });
+
+
+        Button pedirRte = (Button) findViewById(R.id.btnRaite);
+        buttonHme.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+
+                AccessToken accessToken = AccessToken.getCurrentAccessToken();
+
+                GraphRequest request = GraphRequest.newMeRequest(
+                        accessToken,
+                        new GraphRequest.GraphJSONObjectCallback() {
+                            @Override
+                            public void onCompleted(
+                                    JSONObject object,
+                                    GraphResponse response) {
+                                // Application code
+                                try {
+                                    idUser = object.getString("id");
+
+                                    String params = "{ "
+                                            + "\"id\": " + idUser
+                                            + ", \"lat\": " + lastKnownLocation.getLatitude()
+                                            + ", \"lon\": " + lastKnownLocation.getLongitude()
+                                            + ", \"idFirebase\": " + "\"" + FirebaseInstanceId.getInstance().getToken() + "\""
+                                            +  " }";
+
+                                    Log.d("json:", params);
+                                    new GetHttpRequest().execute(params);
+
+                                } catch (JSONException e) {
+
+                                }
+                                Log.d("json:", object.toString());
+
+                            }
+                        });
+
+                Bundle parameters = new Bundle();
+                parameters.putString("fields", "id");
+                request.setParameters(parameters);
+                request.executeAsync();
+
             }
         });
     }
@@ -90,26 +153,6 @@ public class MapsActivityPedirRaite extends FragmentActivity implements OnMapRea
 
         mMap.setInfoWindowAdapter(this);
 
-        /*
-        mMap.addMarker(new MarkerOptions()
-                .position(new LatLng(40,-73))
-                .title("Marker"));
-        mMap.setInfoWindowAdapter(new GoogleMap.InfoWindowAdapter() {
-            @Override
-            public View getInfoWindow(Marker marker) {
-                return null;
-            }
-
-            @Override
-            public View getInfoContents(Marker marker) {
-                View v = getLayoutInflater().inflate(R.layout.activity_passenger_info, null);
-
-                LatLng latLng = marker.getPosition();
-
-                return v;
-            }
-        });
-        */
 
     }
 
@@ -197,6 +240,73 @@ public class MapsActivityPedirRaite extends FragmentActivity implements OnMapRea
             @Override
             public View getInfoContents(Marker marker) {
                 return null;
+            }
+
+
+            private class GetHttpRequest extends AsyncTask<String, Object, Boolean> {
+                @Override
+                protected Boolean doInBackground(String... params) {
+                    Boolean bool = null;
+                    JSONObject obj = null;
+                    String url = "https://p4x0vleufi.execute-api.us-east-1.amazonaws.com/dev/queueUp";
+                    try {
+                        obj = new JSONObject(params[0]);
+
+                        StringBuilder sb = new StringBuilder();
+                        HttpURLConnection urlConnection = null;
+                        URL url2 = new URL(url);
+                        urlConnection = (HttpURLConnection) url2.openConnection();
+                        urlConnection.setDoOutput(true);
+                        urlConnection.setRequestMethod("POST");
+                        urlConnection.setUseCaches(false);
+                        urlConnection.setConnectTimeout(10000);
+                        urlConnection.setReadTimeout(10000);
+                        urlConnection.setRequestProperty("Content-Type","application/json");
+                        urlConnection.connect();
+
+                        OutputStreamWriter out = new OutputStreamWriter(urlConnection.getOutputStream());
+                        out.write(obj.toString());
+                        out.close();
+
+                        int HttpResult =urlConnection.getResponseCode();
+                        if(HttpResult ==HttpURLConnection.HTTP_OK){
+                            BufferedReader br = new BufferedReader(new InputStreamReader(
+                                    urlConnection.getInputStream(),"utf-8"));
+                            String line = null;
+                            while ((line = br.readLine()) != null) {
+                                sb.append(line + "\n");
+                            }
+                            br.close();
+
+                            Log.d("woah", "" + sb.toString());
+                        }else{
+                            Log.d("woah", urlConnection.getResponseMessage());
+
+                        }
+
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    } catch (MalformedURLException e) {
+                        e.printStackTrace();
+                    } catch (ProtocolException e) {
+                        e.printStackTrace();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    Log.d("wtf", params[0].toString());
+                    bool = true;
+                    return bool;
+
+                }
+
+                @Override
+                protected void onPostExecute(Boolean result) {
+                    if (result == true){
+                    }
+                    else{
+                        //startActivity(new Intent(askPhoneNumber.this, firstLogin.class));
+                    }
+                }
             }
         }
 
