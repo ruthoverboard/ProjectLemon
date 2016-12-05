@@ -58,6 +58,7 @@ import java.net.URL;
 
 public class MapsActivityPedirRaite extends FragmentActivity implements OnMapReadyCallback, GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener,
+        GoogleMap.OnInfoWindowClickListener,
         LocationListener
         , GoogleMap.InfoWindowAdapter
         {
@@ -157,6 +158,8 @@ public class MapsActivityPedirRaite extends FragmentActivity implements OnMapRea
     }
 
 
+
+
             public void getPermissions(){
 
                 int MY_PERMISSIONS_REQUEST_LOCATION = 99;
@@ -230,6 +233,11 @@ public class MapsActivityPedirRaite extends FragmentActivity implements OnMapRea
             @Override
             public View getInfoContents(Marker marker) {
                 return null;
+            }
+
+            @Override
+            public void onInfoWindowClick(Marker marker) {
+
             }
 
 

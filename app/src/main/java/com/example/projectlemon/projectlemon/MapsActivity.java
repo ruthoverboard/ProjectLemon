@@ -32,6 +32,7 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.GroundOverlay;
 import com.google.android.gms.maps.model.GroundOverlayOptions;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import org.json.JSONArray;
@@ -43,6 +44,7 @@ import org.json.JSONObject;
 
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback, GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener,
+        GoogleMap.OnInfoWindowClickListener,
         LocationListener {
 
 
@@ -226,6 +228,13 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         Toast.makeText(this, "It WORKS!", Toast.LENGTH_LONG).show();
     }
 
+    @Override
+    public void onInfoWindowClick(Marker marker) {
+
+        Toast.makeText(this, marker.getTitle(),
+                Toast.LENGTH_SHORT).show();
+    }
+
 
     private class GetHttpRequest extends AsyncTask<String, Object, JSONArray> {
         @Override
@@ -281,6 +290,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     mMap.addMarker(new MarkerOptions()
                             .position(new LatLng(lat,lng))
                             .title(result.getJSONObject(i).get("name").toString()));
+                    mMap.setOnInfoWindowClickListener((GoogleMap.OnInfoWindowClickListener) this);
 
 
                 } catch (JSONException e) {
@@ -289,6 +299,70 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             }
 
 
+
+
+        }
+    }
+
+    private class GetRouteRequest extends AsyncTask<String, Object, JSONArray> {
+        @Override
+        protected JSONArray doInBackground(String... params) {
+            JSONArray response = null;
+            Boolean bool = null;
+
+            try {
+                String url = "https://p4x0vleufi.execute-api.us-east-1.amazonaws.com/dev/getRoute/" + 1;
+
+                response = new JSONArray(HttpRequest.get(url).body());
+
+                if(response != null && response.length() > 0 ){
+
+                    //String idUserDB = response.getJSONObject(0).get("idUser").toString();
+                    Log.d("RouteTrip", response.toString());
+
+                    //if (params[0].equals(idUserDB)) {
+                    //Log.d("wtf", params[0]);
+                    //startActivity(new Intent(MainActivity.this, UserProfileActivity.class));
+                    //bool = true;
+                    //} else {
+                    //startActivity(new Intent(MainActivity.this, firstLogin.class));
+                    // bool = false;
+                    // }
+                }
+                else{
+                    bool = false;
+                }
+
+
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+
+            //Log.d("HttpReq", response.toString());
+            return response;
+            //return response;
+
+        }
+
+        @Override
+        protected void onPostExecute(JSONArray result) {
+            //Log.d("HttpReq", result.toString());
+
+            for(int i = 0; i < result.length(); i++){
+
+                try {
+                    double lat = Double.parseDouble(result.getJSONObject(i).get("latitude").toString());
+                    double lng = Double.parseDouble(result.getJSONObject(i).get("longitude").toString());
+                    mMap.addMarker(new MarkerOptions()
+                            .position(new LatLng(lat,lng))
+                            .title("HAYMUCHASCOSASWUUUUUUUUUUUUUUU"));
+
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
 
 
         }
