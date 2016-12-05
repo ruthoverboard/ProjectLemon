@@ -3,6 +3,7 @@ package com.example.projectlemon.projectlemon;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
@@ -34,6 +35,7 @@ import com.google.android.gms.maps.model.GroundOverlayOptions;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.model.PolylineOptions;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -78,8 +80,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         final Button button = (Button) findViewById(R.id.btnRoute);
         button.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                //getRoute();
+                getRoute();
                 new GetHttpRequest().execute();
+                new GetRouteRequest().execute();
             }
         });
 
@@ -103,6 +106,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
+        mMap.setOnInfoWindowClickListener(this);
         if (ContextCompat.checkSelfPermission(this,
                 Manifest.permission.ACCESS_FINE_LOCATION)
                 == PackageManager.PERMISSION_GRANTED) {
@@ -290,8 +294,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     mMap.addMarker(new MarkerOptions()
                             .position(new LatLng(lat,lng))
                             .title(result.getJSONObject(i).get("name").toString()));
-                    mMap.setOnInfoWindowClickListener((GoogleMap.OnInfoWindowClickListener) this);
-
 
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -348,16 +350,20 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         @Override
         protected void onPostExecute(JSONArray result) {
             //Log.d("HttpReq", result.toString());
-
+            LatLng a;
             for(int i = 0; i < result.length(); i++){
 
                 try {
                     double lat = Double.parseDouble(result.getJSONObject(i).get("latitude").toString());
                     double lng = Double.parseDouble(result.getJSONObject(i).get("longitude").toString());
-                    mMap.addMarker(new MarkerOptions()
-                            .position(new LatLng(lat,lng))
-                            .title("HAYMUCHASCOSASWUUUUUUUUUUUUUUU"));
-
+                    if(i > 0) {
+                        a = new LatLng(Double.parseDouble(result.getJSONObject(i-1).get("latitude").toString()),
+                                Double.parseDouble(result.getJSONObject(i-1).get("longitude").toString()));
+                        mMap.addPolyline((new PolylineOptions()
+                                .add(a, new LatLng(lat,lng))
+                                .width(5)
+                                .color(Color.RED)));
+                    }
 
                 } catch (JSONException e) {
                     e.printStackTrace();
