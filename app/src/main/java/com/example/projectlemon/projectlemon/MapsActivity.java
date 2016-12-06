@@ -172,8 +172,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     @Override
     public void onLocationChanged(Location location) {
-        //latSend = location.getLatitude();
-        //longSend = location.getLongitude();
 
         if(driverIcon != null) {
             driverIcon.setPosition(new LatLng(location.getLatitude(), location.getLongitude()));
@@ -245,7 +243,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         }else{
             per = true;
         }
-        // Permission was granted.
 
     }
 
@@ -310,8 +307,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             try {
                 obj = new JSONObject(params[0]);
 
-                Log.d("My App", obj.toString());
-
                 StringBuilder sb = new StringBuilder();
                 HttpURLConnection urlConnection=null;
                 URL url2 = new URL(url);
@@ -338,9 +333,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     }
                     br.close();
 
-                    Log.d("woah", ""+sb.toString());
                 }else{
-                    Log.d("woah", urlConnection.getResponseMessage());
 
                 }
             } catch (JSONException e) {
@@ -352,7 +345,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             } catch (IOException e) {
                 e.printStackTrace();
             }
-            Log.d("wtf", params[0].toString());
             bool = true;
             return bool;
 
@@ -373,8 +365,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             try {
                 obj = new JSONObject(params[0]);
 
-                Log.d("My App", obj.toString());
-
                 StringBuilder sb = new StringBuilder();
                 HttpURLConnection urlConnection=null;
                 URL url2 = new URL(url);
@@ -401,11 +391,13 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     }
                     br.close();
 
+<<<<<<< HEAD
                     Log.d("woah", ""+sb.toString());
                     String s = new JSONArray(sb.toString()).getJSONObject(0).get("idTrip").toString();
                     idTrip = Integer.parseInt(s);
+=======
+>>>>>>> d2cd6ca143813e065451c3c64cb3ff381459b451
                 }else{
-                    Log.d("woah", urlConnection.getResponseMessage());
 
                 }
             } catch (JSONException e) {
@@ -417,7 +409,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             } catch (IOException e) {
                 e.printStackTrace();
             }
-            Log.d("wtf", params[0].toString());
             bool = true;
             return bool;
 
@@ -442,37 +433,23 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
                 if(response != null && response.length() >  0 ){
 
-                    //String idUserDB = response.getJSONObject(0).get("idUser").toString();
                     Log.d("HttpSNAP", response.toString());
 
-                    //if (params[0].equals(idUserDB)) {
-                        //Log.d("wtf", params[0]);
-                        //startActivity(new Intent(MainActivity.this, UserProfileActivity.class));
-                        //bool = true;
-                    //} else {
-                        //startActivity(new Intent(MainActivity.this, firstLogin.class));
-                       // bool = false;
-                   // }
                 }
                 else{
                     bool = false;
                 }
 
-
             } catch (JSONException e) {
                 e.printStackTrace();
             }
 
-
-            //Log.d("HttpReq", response.toString());
             return response;
-            //return response;
 
         }
 
         @Override
         protected void onPostExecute(JSONArray result) {
-            //Log.d("HttpReq", result.toString());
 
             for(int i = 0; i < result.length(); i++){
 
@@ -490,9 +467,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 }
             }
 
-
-
-
         }
     }
 
@@ -509,18 +483,14 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
                 if(response != null && response.length() > 0 ){
 
-                    Log.d("RouteTrip", response.toString());
-
                 }
                 else{
                     bool = false;
                 }
 
-
             } catch (JSONException e) {
                 e.printStackTrace();
             }
-
 
             return response;
 
@@ -528,7 +498,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
         @Override
         protected void onPostExecute(JSONArray result) {
-            //Log.d("HttpReq", result.toString());
             LatLng a;
             for(int i = 0; i < result.length(); i++){
 
@@ -562,8 +531,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             try {
                 obj = new JSONObject(params[0]);
 
-                Log.d("My App", obj.toString());
-
                 StringBuilder sb = new StringBuilder();
                 HttpURLConnection urlConnection=null;
                 URL url2 = new URL(url);
@@ -590,9 +557,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     }
                     br.close();
 
-                    Log.d("woah", ""+sb.toString());
                 }else{
-                    Log.d("woah", urlConnection.getResponseMessage());
 
                 }
             } catch (JSONException e) {
@@ -604,7 +569,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             } catch (IOException e) {
                 e.printStackTrace();
             }
-            Log.d("wtf", params[0].toString());
             bool = true;
             return bool;
 
@@ -664,8 +628,8 @@ class RetrieveFeedTask extends AsyncTask<Void, Void, String> {
             String s = response;
         }
         //
-        // TODO: check this.exception
-        // TODO: do something with the feed
+        //
+        //
         /*
 
             try {

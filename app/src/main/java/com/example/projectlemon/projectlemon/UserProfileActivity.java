@@ -12,7 +12,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
-
 import com.facebook.AccessTokenTracker;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
@@ -56,42 +55,14 @@ public class UserProfileActivity extends AppCompatActivity {
 
 
         callbackManager = CallbackManager.Factory.create();
-        //Bundle extras = getIntent().getExtras();
 
-
-        //if(extras != null){
-            //career = extras.getString("career");
-        //}
-
-        /*
-        callbackManager = CallbackManager.Factory.create();
-        LoginButton loginButton = (LoginButton) findViewById(R.id.login_button);
-        LoginManager.getInstance().registerCallback(callbackManager,
-                new FacebookCallback<LoginResult>() {
-                    @Override
-                    public void onSuccess(LoginResult loginResult) {
-                        //query que manda a buscar al usuario
-                    }
-
-                    @Override
-                    public void onCancel() {
-                        // App code
-                    }
-
-                    @Override
-                    public void onError(FacebookException exception) {
-                        // App code
-                    }
-                });
-*/
 
         AccessTokenTracker accessTokenTracker = new AccessTokenTracker() {
             @Override
             protected void onCurrentAccessTokenChanged(AccessToken oldAccessToken,
                                                        AccessToken currentAccessToken) {
                 if (currentAccessToken == null) {
-                    //write your code here what to do when user logout
-                    //accessTokenTracker.stopTracking();
+
                     startActivity(new Intent(UserProfileActivity.this, MainActivity.class));
                 }
             }
@@ -109,23 +80,16 @@ public class UserProfileActivity extends AppCompatActivity {
                             JSONObject object,
                             GraphResponse response) {
                         // Application code
-                        //ProfilePictureView imgProfile = (ProfilePictureView)findViewById(R.id.img);
 
-                        //if(career != null){
-                        //txtCareer.setText(career);
-                        //}
 
                         TextView txtName = (TextView) findViewById(R.id.txtName);
                         TextView txtFriends = (TextView) findViewById(R.id.txtFriends);
-                        //final TextView txtCareer = (TextView)findViewById(R.id.txtCareer);
 
 
                         try {
                             txtName.setText(object.getString("name"));
 
                             JSONObject picture = object.getJSONObject("picture").getJSONObject("data");
-
-                            //new DownloadImageTask((ImageView) findViewById(R.id.imgProfile)).execute(picture.getString("url"));
 
                             ProfilePictureView profilePictureView;
                             profilePictureView = (ProfilePictureView) findViewById(R.id.img);
@@ -137,59 +101,15 @@ public class UserProfileActivity extends AppCompatActivity {
                             for (int i=0; i < friendsData.length(); i++) {
                                 JSONObject obj = friendsData.getJSONObject(i);
                                 txtFriends.setText(txtFriends.getText() + obj.getString("name") + "\n");
-                                Log.d("json:", obj.toString());
                             }
 
 
                             new GetHttpRequest().execute(idUser);
 
                             String url = "https://p4x0vleufi.execute-api.us-east-1.amazonaws.com/dev/searchUser/" + idUser;
-                            Log.d("url", url);
-
-
-                            /*
-                            AsyncHttpClient client = new AsyncHttpClient();
-                            client.get(url, new JsonHttpResponseHandler() {
-                                @Override
-                                public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
-                                    //super.onFailure(statusCode, headers, throwable, errorResponse);
-                                    Log.d("nope", String.valueOf(errorResponse));
-
-                                }
-                                @Override
-                                public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
-                                    //super.onSuccess(statusCode, headers, response);
-                                    Log.d("yay2", response.toString());
-                                    try {
-                                        txtCareer.setText(response.getJSONObject(0).get("career").toString());
-
-                                    } catch (JSONException e) {
-                                        e.printStackTrace();
-                                    }
-
-
-                                }
-                                @Override
-                                public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONArray errorResponse) {
-                                    super.onFailure(statusCode, headers, throwable, errorResponse);
-                                    Log.d("nope2", String.valueOf(errorResponse));
-
-
-                                }
-                                @Override
-                                public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
-                                    super.onFailure(statusCode, headers, responseString, throwable);
-                                    Log.d("nope3", String.valueOf(responseString));
-                                }
-                            });
-
-*/
-
 
                         } catch (JSONException e) {
-                            //txtFriends.setText("fallo");
                         }
-                        Log.d("json:", object.toString());
 
 
 
@@ -207,9 +127,7 @@ public class UserProfileActivity extends AppCompatActivity {
         request.setParameters(parameters);
         request.executeAsync();
 
-        //base de datos
 
-        //Dar raite
         Button btnMaps = (Button) findViewById(R.id.btnDarRaite);
         btnMaps.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
@@ -228,44 +146,6 @@ public class UserProfileActivity extends AppCompatActivity {
 
     }
 
-/*
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        callbackManager.onActivityResult(requestCode, resultCode, data);
-
-    }
-*/
-
-    //new DownloadImageTask((ImageView) findViewById(R.id.imgProfile)).execute(picture.getString("url"));
-    private class DownloadImageTask extends AsyncTask<String, Void, Bitmap> {
-        ImageView bmImage;
-
-        public DownloadImageTask(ImageView bmImage) {
-            this.bmImage = bmImage;
-        }
-
-        protected Bitmap doInBackground(String... urls) {
-            String urldisplay = urls[0];
-            Bitmap mIcon11 = null;
-            try {
-                InputStream in = new java.net.URL(urldisplay).openStream();
-                mIcon11 = BitmapFactory.decodeStream(in);
-            } catch (Exception e) {
-                Log.e("Error", e.getMessage());
-                e.printStackTrace();
-            }
-            return mIcon11;
-        }
-
-        protected void onPostExecute(Bitmap result) {
-
-            bmImage.setImageBitmap(result);
-            bmImage.setAdjustViewBounds(true);
-            bmImage.setScaleType(ImageView.ScaleType.FIT_CENTER);
-        }
-    }
-
 
     private class GetHttpRequest extends AsyncTask<String, Object, JSONArray> {
         @Override
@@ -278,8 +158,6 @@ public class UserProfileActivity extends AppCompatActivity {
 
                 response = new JSONArray(HttpRequest.get(url).body());
                 String idUserDB = response.getJSONObject(0).get("idUser").toString();
-                Log.d("HttpSNAP", idUserDB);
-
 
             } catch (JSONException e) {
                 e.printStackTrace();
@@ -288,13 +166,11 @@ public class UserProfileActivity extends AppCompatActivity {
 
             Log.d("HttpReq", response.toString());
             return response;
-            //return response;
 
         }
 
         @Override
         protected void onPostExecute(JSONArray result) {
-            Log.d("HttpReq", result.toString());
             try {
                 final TextView txtCareer = (TextView)findViewById(R.id.txtCareer);
                 txtCareer.setText(result.getJSONObject(0).get("career").toString());

@@ -19,20 +19,17 @@ import com.facebook.GraphResponse;
 import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
-import com.loopj.android.http.AsyncHttpClient;
-import com.loopj.android.http.JsonHttpResponseHandler;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import cz.msebera.android.httpclient.Header;
-//comeonnnnn
+
 
 public class MainActivity extends AppCompatActivity {
-//comentario loco
+
     public CallbackManager callbackManager;
-    //public FacebookCallback<LoginResult> callback;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,82 +75,19 @@ public class MainActivity extends AppCompatActivity {
                                         String idUser = null;
                                         try {
                                             idUser = object.getString("id");
-                                            Log.d("FBID", idUser);
+
                                         } catch (JSONException e) {
                                             e.printStackTrace();
                                         }
-                                        Log.d("FBjson:", object.toString());
-
                                         String url = "https://p4x0vleufi.execute-api.us-east-1.amazonaws.com/dev/searchUser/" + idUser;
-                                        //Log.d("url", url);
-                                        //AsyncHttpClient client = new AsyncHttpClient();
-                                        //final String finalIdUser = idUser;
-
-
                                         new GetHttpRequest().execute(idUser);
 
-                                        /*
-                                        client.get(url, new JsonHttpResponseHandler() {
-                                            @Override
-                                            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
-                                                //super.onFailure(statusCode, headers, throwable, errorResponse);
-                                                Log.d("nope", String.valueOf(errorResponse));
-
-                                            }
-                                            @Override
-                                            public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
-                                                //super.onSuccess(statusCode, headers, response);
-                                                Log.d("yay2", response.toString());
-                                                try {
-                                                    String idUserDB = response.getJSONObject(0).get("idUser").toString();
-                                                    Log.d("yay2", idUserDB);
-                                                    Log.d("yay22", finalIdUser);
-                                                    if(finalIdUser.equals(idUserDB)) {
-                                                        Log.d("wtf", finalIdUser);
-                                                        startActivity(new Intent(MainActivity.this, UserProfileActivity.class));
-                                                    }
-                                                    else{
-                                                        startActivity(new Intent(MainActivity.this, firstLogin.class));
-                                                    }
-                                                } catch (JSONException e) {
-                                                    startActivity(new Intent(MainActivity.this, firstLogin.class));
-                                                    e.printStackTrace();
-                                                }
-
-
-                                            }
-                                            @Override
-                                            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONArray errorResponse) {
-                                                super.onFailure(statusCode, headers, throwable, errorResponse);
-                                                Log.d("nope2", String.valueOf(errorResponse));
-
-
-                                            }
-                                            @Override
-                                            public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
-                                                super.onFailure(statusCode, headers, responseString, throwable);
-                                                Log.d("nope3", String.valueOf(responseString));
-                                                startActivity(new Intent(MainActivity.this, firstLogin.class));
-                                            }
-                                        });
-                                        */
                                     }
                                 });
                         Bundle parameters = new Bundle();
                         parameters.putString("fields", "id");
                         request.setParameters(parameters);
                         request.executeAsync();
-
-                        //AccessToken accessToken = loginResult.getAccessToken();
-                        //Profile profile = Profile.getCurrentProfile();
-
-                        //Bundle pass = new Bundle();
-                        //Intent intent = new Intent(getApplicationContext(), UserProfileActivity.class);
-                        //pass.putString("token", accessToken.getToken());
-
-                        //intent.putExtras(pass);
-                        //intent.putExtra("profile", profile.getName());
-                        //startActivity(intent);
 
                     }
 
@@ -196,14 +130,10 @@ public class MainActivity extends AppCompatActivity {
                 if(response != null && response.length() > 0 ){
 
                     String idUserDB = response.getJSONObject(0).get("idUser").toString();
-                    Log.d("HttpSNAP", idUserDB);
 
                     if (params[0].equals(idUserDB)) {
-                        Log.d("wtf", params[0]);
-                        //startActivity(new Intent(MainActivity.this, UserProfileActivity.class));
                         bool = true;
                     } else {
-                        //startActivity(new Intent(MainActivity.this, firstLogin.class));
                         bool = false;
                     }
                 }
@@ -215,17 +145,12 @@ public class MainActivity extends AppCompatActivity {
             } catch (JSONException e) {
                 e.printStackTrace();
             }
-
-
-            //Log.d("HttpReq", response.toString());
             return bool;
-            //return response;
 
         }
 
         @Override
         protected void onPostExecute(Boolean result) {
-            //Log.d("HttpReq", result.toString());
             if (result == true){
                 startActivity(new Intent(MainActivity.this, UserProfileActivity.class));
             }
