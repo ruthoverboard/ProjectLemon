@@ -191,7 +191,7 @@ public class MapsActivityPedirRaite extends FragmentActivity implements OnMapRea
             @Override
             public void onLocationChanged(Location location) {
                     if(awsHelper.driver != null){
-                        if(first) {
+                        if(first = true) {
                             GroundOverlayOptions driveOptions = new GroundOverlayOptions()
                                     .image(BitmapDescriptorFactory.fromResource(R.mipmap.car_driver))
                                     .position(new LatLng(awsHelper.driver.getLatitude(), awsHelper.driver.getLongitude()),30f,20f);

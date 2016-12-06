@@ -53,6 +53,7 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.ProtocolException;
 import java.net.URL;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 //import com.amazonaws.mobileconnectors.dynamodbv2.dynamodbmapper.*;
 
@@ -71,7 +72,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     int idTrip =1;
     int count = 1;
     String query;
-    boolean tripActive = false;
+    AtomicBoolean tripActive = new AtomicBoolean(false);
     GroundOverlay driverIcon;
     String Username = "";
     BigInteger UserId;
@@ -177,7 +178,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         if(driverIcon != null) {
             driverIcon.setPosition(new LatLng(location.getLatitude(), location.getLongitude()));
         }
-        if(tripActive){
+        if(tripActive.get() == true){
             try{
                 if(Math.abs(Math.abs(location.getLatitude()) - Math.abs(lastKnownLocation.getLatitude())) >= .001 ||
                         Math.abs(Math.abs(location.getLongitude()) - Math.abs(lastKnownLocation.getLongitude())) >= .001)
@@ -269,7 +270,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     @Override
     public void onInfoWindowClick(Marker marker) {
 
-        tripActive = true;
+        tripActive.set(true);
         awsHelper.key = marker.getSnippet();
         Toast.makeText(this, marker.getTitle(),
                 Toast.LENGTH_SHORT).show();
@@ -401,6 +402,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     br.close();
 
                     Log.d("woah", ""+sb.toString());
+                    String s = new JSONArray(sb.toString()).getJSONObject(0).get("idTrip").toString();
+                    idTrip = Integer.parseInt(s);
                 }else{
                     Log.d("woah", urlConnection.getResponseMessage());
 
